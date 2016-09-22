@@ -60,7 +60,7 @@ data:extend({
       {type="fluid", name="water", amount=2.5},
       {"stone", 5}
     },
-    result = "mug-of-coffee"
+    result = "mug-of-coffee",
     result_count = 5
   },
 })
