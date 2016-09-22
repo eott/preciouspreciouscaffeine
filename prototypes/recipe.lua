@@ -56,7 +56,7 @@ data:extend({
     category = "crafting-with-fluid",
     ingredients = 
     {
-      {"roasted-coffee-beans",20},
+      {"coffee-powder",1},
       {type="fluid", name="water", amount=2.5},
       {"stone", 5}
     },
