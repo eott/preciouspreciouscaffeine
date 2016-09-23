@@ -9,6 +9,8 @@ local decomposition_rate = 0.1 -- Defines how quickly the caffeine
                                -- level decreases (per tick)
 local decomposition_timespan = 10 -- Defines how often (in ticks)
                                   -- the caffeine level is updated
+local level_per_mug = 20 -- Defines by how much the caffeine level
+                         -- is raised for each mug
 
 -- Variables, local to the scope
 local caffeine_level = 0.0 -- Holds the current caffeine level
@@ -88,11 +90,20 @@ script.on_event(defines.events.on_robot_built_entity, builtEntity)
 function showGUI()
     local player = game.players[1]
     if player.gui.left.ppcRoot == nil then
-        player.gui.left.add{type = "frame", name = "ppcRoot", direction = "vertical"}
+        player.gui.left.add{type = "frame", name = "ppcRoot", direction = "horizontal"}
+        player.gui.left.ppcRoot.add{type = "sprite-button", name = "drinkButton", sprite = "item/mug-of-coffee"}
         player.gui.left.ppcRoot.add{type = "label", name = "caffeineLevelLabel", caption = "0%"}
+
+        player.gui.left.ppcRoot.style.minimal_width = 100
+
+        player.gui.left.ppcRoot.drinkButton.style.minimal_width = 32
+        player.gui.left.ppcRoot.drinkButton.style.minimal_height = 32
+
+        player.gui.left.ppcRoot.caffeineLevelLabel.style.top_padding = 5
     end
 end
 
+---------------------------------------------------------
 -- Updates the GUI for the caffeine level
 function updateGUI()
     showGUI()
@@ -100,5 +111,57 @@ function updateGUI()
     local player = game.players[1]
     if player.gui.left.ppcRoot ~= nil then
         player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(caffeine_level), "%")
+    end
+end
+
+---------------------------------------------------------
+-- Handles a click event on the GUI button for "drinking"
+function onGUIClick(event)
+    if (event.element.name == "drinkButton") then
+        tryConsume()
+        updateGUI()
+    end
+end
+script.on_event(defines.events.on_gui_click, onGUIClick)
+
+
+---------------------------------------------------------
+-- Tries to consume as many mugs as necessary to raise the
+-- caffeine level back to 100, where partial multiples
+-- count as a full mug. E.g if the level is 85 and every
+-- mug gives 20, then it's still two full mugs
+function tryConsume()
+    local nrToConsume = math.ceil((100 - caffeine_level) / level_per_mug)
+
+    -- Check quickbar first
+    local inv = game.players[1].get_inventory(defines.inventory.player_quickbar)
+    local count = inv.get_item_count("mug-of-coffee")
+
+    if (count > 0) then
+        if (count >= nrToConsume) then
+            inv.remove({name = "mug-of-coffee", count = nrToConsume})
+            caffeine_level = 100.0
+            nrToConsume = 0
+        elseif (count > 0) then
+            inv.remove({name = "mug-of-coffee", count = count})
+            nrToConsume = nrToConsume - count
+            caffeine_level = caffeine_level + count * level_per_mug
+        end
+    end
+
+    -- Now check main inv
+    local inv = game.players[1].get_inventory(defines.inventory.player_main)
+    local count = inv.get_item_count("mug-of-coffee")
+
+    if (count > 0 and nrToConsume > 0) then
+        if (count >= nrToConsume) then
+            inv.remove({name = "mug-of-coffee", count = nrToConsume})
+            caffeine_level = 100.0
+            nrToConsume = 0
+        elseif (count > 0) then
+            inv.remove({name = "mug-of-coffee", count = count})
+            nrToConsume = nrToConsume - count
+            caffeine_level = caffeine_level + count * level_per_mug
+        end
     end
 end
