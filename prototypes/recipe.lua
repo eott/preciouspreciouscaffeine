@@ -32,9 +32,10 @@ data:extend({
     energy_required = 3.5,
     ingredients = 
     {
-      {"coffee-beans",1}
+      {"coffee-beans",5}
     },
-    result = "roasted-coffee-beans"
+    result = "roasted-coffee-beans",
+    result_count = 5
   },
 
   {

@@ -1,6 +1,6 @@
 ---------------------------------------------------------
 -- Constants, local to the scope
-local berry_plucking_timespan = 120 -- Defines how many ticks 
+local berry_plucking_timespan = 240 -- Defines how many ticks 
                                     -- pass for an update in the
                                     -- coffee plantation
 local growth_amount = 1 -- Defines how many berries grow in one
