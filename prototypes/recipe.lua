@@ -2,7 +2,7 @@ data:extend({
   {
     type = "recipe",
     name = "coffee-plantation",
-    enabled = "true",
+    enabled = "false",
     ingredients = 
     {
       {"iron-stick",10},
@@ -16,7 +16,7 @@ data:extend({
   {
     type = "recipe",
     name = "coffee-beans",
-    enabled = "true",
+    enabled = "false",
     ingredients = 
     {
       {"coffee-berries",1}
@@ -27,7 +27,7 @@ data:extend({
   {
     type = "recipe",
     name = "roasted-coffee-beans",
-    enabled = "true",
+    enabled = "false",
     category = "smelting",
     energy_required = 3.5,
     ingredients = 
@@ -40,7 +40,7 @@ data:extend({
   {
     type = "recipe",
     name = "coffee-powder",
-    enabled = "true",
+    enabled = "false",
     ingredients = 
     {
       {"roasted-coffee-beans",20}
@@ -51,7 +51,7 @@ data:extend({
   {
     type = "recipe",
     name = "mug-of-coffee",
-    enabled = "true",
+    enabled = "false",
     energy_required = 3,
     category = "crafting-with-fluid",
     ingredients = 
