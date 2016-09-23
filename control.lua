@@ -11,9 +11,12 @@ local decomposition_timespan = 10 -- Defines how often (in ticks)
                                   -- the caffeine level is updated
 local level_per_mug = 20 -- Defines by how much the caffeine level
                          -- is raised for each mug
+local buffed_speed_modifier = 0.5 -- Defines by how much the crafting
+                                  -- speed is buffed (additional to 100%)
 
 -- Variables, local to the scope
 local caffeine_level = 0.0 -- Holds the current caffeine level
+local initial_modifier = 0.0 -- Holds the initial crafting speed modifier
 
 ---------------------------------------------------------
 -- Is called in each tick and handles the "mining" process of berries
@@ -32,12 +35,20 @@ function onTick()
         end
     end
 
+    -- The first time the caffeine level is zero (usually at game start), we save the
+    -- initial modifier
+    if (caffeine_level == 0.0) then
+        initial_modifier = game.forces.player.manual_crafting_speed_modifier
+    end
+
     -- Update caffeine level, but only every decomposition_timespan ticks
     if (game.tick % decomposition_timespan == 0) then
         if (caffeine_level > decomposition_rate * decomposition_timespan) then
             caffeine_level = caffeine_level - decomposition_rate * decomposition_timespan
+            game.forces.player.manual_crafting_speed_modifier = buffed_speed_modifier
         else
             caffeine_level = 0.0
+            game.forces.player.manual_crafting_speed_modifier = initial_modifier
         end
 
         updateGUI()
