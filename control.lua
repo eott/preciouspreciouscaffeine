@@ -3,10 +3,19 @@
 local berry_plucking_timespan = 120 -- Defines how many ticks 
                                     -- pass for an update in the
                                     -- coffee plantation
-local growth_amount = 1
+local growth_amount = 1 -- Defines how many berries grow in one
+                        -- cycle
+local decomposition_rate = 0.1 -- Defines how quickly the caffeine
+                               -- level decreases (per tick)
+local decomposition_timespan = 10 -- Defines how often (in ticks)
+                                  -- the caffeine level is updated
+
+-- Variables, local to the scope
+local caffeine_level = 0.0 -- Holds the current caffeine level
 
 ---------------------------------------------------------
 -- Is called in each tick and handles the "mining" process of berries
+-- as well as the caffeine level update
 function onTick()
     -- Check if the necessary timespan has passed
     if (game.tick % berry_plucking_timespan == 0) then
@@ -19,6 +28,17 @@ function onTick()
                 table.remove(global.plantations, index)
             end
         end
+    end
+
+    -- Update caffeine level, but only every decomposition_timespan ticks
+    if (game.tick % decomposition_timespan == 0) then
+        if (caffeine_level > decomposition_rate * decomposition_timespan) then
+            caffeine_level = caffeine_level - decomposition_rate * decomposition_timespan
+        else
+            caffeine_level = 0.0
+        end
+
+        updateGUI()
     end
 end
 
@@ -61,3 +81,24 @@ function builtEntity(event)
 end
 script.on_event(defines.events.on_built_entity, builtEntity)
 script.on_event(defines.events.on_robot_built_entity, builtEntity)
+
+---------------------------------------------------------
+-- Shows the GUI for the caffeine level, if it does not
+-- exist already
+function showGUI()
+    local player = game.players[1]
+    if player.gui.left.ppcRoot == nil then
+        player.gui.left.add{type = "frame", name = "ppcRoot", direction = "vertical"}
+        player.gui.left.ppcRoot.add{type = "label", name = "caffeineLevelLabel", caption = "0%"}
+    end
+end
+
+-- Updates the GUI for the caffeine level
+function updateGUI()
+    showGUI()
+
+    local player = game.players[1]
+    if player.gui.left.ppcRoot ~= nil then
+        player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(caffeine_level), "%")
+    end
+end
