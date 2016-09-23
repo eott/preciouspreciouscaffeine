@@ -165,3 +165,11 @@ function tryConsume()
         end
     end
 end
+
+---------------------------------------------------------
+-- Handles the custom hotkey for consuming coffee
+function onHotkey(event)
+    tryConsume()
+    updateGUI()
+end
+script.on_event("ppc-consume", onHotkey)
