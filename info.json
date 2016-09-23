@@ -1,10 +1,10 @@
 {
   "name": "PreciousPreciousCaffeine",
-  "version": "0.3",
+  "version": "0.4",
   "factorio_version": "0.13",
   "title": "Precious, precious caffeine",
   "author": "raudorn",
-  "contact": "",
-  "homepage": "",
+  "contact": "https://github.com/eott/preciouspreciouscaffeine",
+  "homepage": "https://github.com/eott/preciouspreciouscaffeine",
   "description": "This mod adds a chain of products with the end result of a nice mug of coffee. What is it good for? Doing stuff faster, of course!\n\nYou will need to research coffee production, which unlocks a production facility where coffee berries are grown. Process the berries to beans, roast and grind them and combine the resulting coffee powder with water and stone to mugs of coffee. These can be consumed for a temporary speed boost. Later research enables the automatic consumption of coffee so, together with logistic robots, you don't need to do anything manually."
 }
