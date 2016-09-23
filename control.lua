@@ -17,6 +17,7 @@ local buffed_speed_modifier = 0.5 -- Defines by how much the crafting
 -- Variables, local to the scope
 local caffeine_level = 0.0 -- Holds the current caffeine level
 local initial_modifier = 0.0 -- Holds the initial crafting speed modifier
+local autoinjector_enabled = false
 
 ---------------------------------------------------------
 -- Is called in each tick and handles the "mining" process of berries
@@ -49,6 +50,18 @@ function onTick()
         else
             caffeine_level = 0.0
             game.forces.player.manual_crafting_speed_modifier = initial_modifier
+        end
+
+        -- Check if the autoinjector needs to be activated
+        local player = game.players[1]
+        if (
+            player.gui.left.ppcRoot
+            and player.gui.left.ppcRoot.autoInjector
+            and player.gui.left.ppcRoot.autoInjector.state
+            and autoinjector_enabled
+            and caffeine_level <= 81
+        ) then
+            tryConsume()
         end
 
         updateGUI()
@@ -111,6 +124,13 @@ function showGUI()
         player.gui.left.ppcRoot.drinkButton.style.minimal_height = 32
 
         player.gui.left.ppcRoot.caffeineLevelLabel.style.top_padding = 5
+    end
+
+    if (autoinjector_enabled and player.gui.left.ppcRoot.autoInjector == nil) then
+        player.gui.left.ppcRoot.add{type = "label", name = "autoInjectorLabel", caption = "Auto"}
+        player.gui.left.ppcRoot.add{type = "checkbox", name = "autoInjector", state = false}
+        player.gui.left.ppcRoot.autoInjectorLabel.style.top_padding = 5
+        player.gui.left.ppcRoot.autoInjector.style.top_padding = 10
     end
 end
 
@@ -184,3 +204,16 @@ function onHotkey(event)
     updateGUI()
 end
 script.on_event("ppc-consume", onHotkey)
+
+---------------------------------------------------------
+-- Handles the research finished event and employs custom
+-- functionality for research effects, namely the auto
+-- injector
+function onResearchFinished(event)
+    if (event.research.name == "ppc-auto-consumption") then
+        autoinjector_enabled = true
+    end
+
+    showGUI()
+end
+script.on_event(defines.events.on_research_finished, onResearchFinished)
