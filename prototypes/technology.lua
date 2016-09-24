@@ -3,6 +3,7 @@ data:extend({
       type = "technology",
       name = "ppc-coffee-production",
       icon = "__PreciousPreciousCaffeine__/graphics/icon_coffee_production.png",
+      icon_size = 128,
       effects =
       {
         {
@@ -43,6 +44,7 @@ data:extend({
       type = "technology",
       name = "ppc-auto-consumption",
       icon = "__PreciousPreciousCaffeine__/graphics/icon_auto_consumption.png",
+      icon_size = 128,
       effects =
       {
         
