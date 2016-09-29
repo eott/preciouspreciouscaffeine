@@ -46,7 +46,7 @@ function onTick()
     if (game.tick % decomposition_timespan == 0) then
         if (caffeine_level > decomposition_rate * decomposition_timespan) then
             caffeine_level = caffeine_level - decomposition_rate * decomposition_timespan
-            game.forces.player.manual_crafting_speed_modifier = buffed_speed_modifier
+            game.forces.player.manual_crafting_speed_modifier = initial_modifier + buffed_speed_modifier
         else
             caffeine_level = 0.0
             game.forces.player.manual_crafting_speed_modifier = initial_modifier
