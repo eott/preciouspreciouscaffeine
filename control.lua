@@ -17,7 +17,7 @@ local buffed_speed_modifier = 0.5 -- Defines by how much the crafting
 -- Variables, local to the scope
 local caffeine_level = 0.0 -- Holds the current caffeine level
 local initial_modifier = 0.0 -- Holds the initial crafting speed modifier
-local autoinjector_enabled = false
+local autoinjector_enabled = nil -- Holds the status if the autoinjector is enabled
 
 ---------------------------------------------------------
 -- Is called in each tick and handles the "mining" process of berries
@@ -50,6 +50,11 @@ function onTick()
         else
             caffeine_level = 0.0
             game.forces.player.manual_crafting_speed_modifier = initial_modifier
+        end
+
+        -- Check status of autoinjector if not read yet
+        if (autoinjector_enabled == nil) then
+            autoinjector_enabled = game.forces.player.technologies["ppc-auto-consumption"].researched
         end
 
         -- Check if the autoinjector needs to be activated
