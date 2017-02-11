@@ -6,15 +6,15 @@ local berry_plucking_timespan = 240 -- Defines how many ticks
 local growth_amount = 1 -- Defines how many berries grow in one
                         -- cycle
 local decomposition_rate = 0.005 -- Defines how quickly the caffeine
-                               -- level decreases (per tick)
+                                 -- level decreases (per tick)
 local decomposition_timespan = 1 -- Defines how often (in ticks)
                                  -- the caffeine level is updated
 local level_per_mug = 1 -- Defines by how much the caffeine level
-                         -- is raised for each mug
-local buffed_running_speed_modifier = 1 -- Defines by how much the
-                                        -- running speed is buffed (additional to 100%)
-local buffed_crafting_speed_modifier = 1    -- Defines by how much the crafting
-                                            -- speed is buffed
+                        -- is raised for each mug
+local buffed_running_speed_modifier = 0.4 -- Defines by how much the
+                                          -- running speed is buffed (additional to 100%)
+local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
+                                           -- speed is buffed
 
 -- Variables, local to the scope
 local caffeine_level = {} -- Holds the current caffeine level
@@ -76,7 +76,6 @@ function updateCaffeineLevel(player)
         end
 
         -- Check if the autoinjector needs to be activated
-
         if (
             player.gui.left.ppcRoot
             and player.gui.left.ppcRoot.autoInjector
