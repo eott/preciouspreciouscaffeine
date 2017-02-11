@@ -1,22 +1,25 @@
 ---------------------------------------------------------
 -- Constants, local to the scope
-local berry_plucking_timespan = 240 -- Defines how many ticks 
+local berry_plucking_timespan = 240 -- Defines how many ticks
                                     -- pass for an update in the
                                     -- coffee plantation
 local growth_amount = 1 -- Defines how many berries grow in one
                         -- cycle
-local decomposition_rate = 0.1 -- Defines how quickly the caffeine
+local decomposition_rate = 0.005 -- Defines how quickly the caffeine
                                -- level decreases (per tick)
-local decomposition_timespan = 10 -- Defines how often (in ticks)
-                                  -- the caffeine level is updated
-local level_per_mug = 20 -- Defines by how much the caffeine level
+local decomposition_timespan = 1 -- Defines how often (in ticks)
+                                 -- the caffeine level is updated
+local level_per_mug = 1 -- Defines by how much the caffeine level
                          -- is raised for each mug
-local buffed_speed_modifier = 0.5 -- Defines by how much the crafting
-                                  -- speed is buffed (additional to 100%)
+local buffed_running_speed_modifier = 1 -- Defines by how much the
+                                        -- running speed is buffed (additional to 100%)
+local buffed_crafting_speed_modifier = 1    -- Defines by how much the crafting
+                                            -- speed is buffed
 
 -- Variables, local to the scope
-local caffeine_level = 0.0 -- Holds the current caffeine level
-local initial_modifier = 0.0 -- Holds the initial crafting speed modifier
+local caffeine_level = {} -- Holds the current caffeine level
+local initial_crafting_speed_modifier = 0.0 -- Holds the initial crafting speed modifier
+local initial_running_speed_modifier = 0.0 -- Holds the initial speed modifier
 local autoinjector_enabled = nil -- Holds the status if the autoinjector is enabled
 
 ---------------------------------------------------------
@@ -38,18 +41,33 @@ function onTick()
 
     -- The first time the caffeine level is zero (usually at game start), we save the
     -- initial modifier
-    if (caffeine_level == 0.0) then
-        initial_modifier = game.forces.player.manual_crafting_speed_modifier
+    for i, player in pairs(game.players) do
+        updateCaffeineLevel(player)
     end
+end
+
+function updateCaffeineLevel(player)
+    if (caffeine_level[player.index] == nil) then
+        caffeine_level[player.index] = 0.0
+    end
+
+    if (caffeine_level[player.index] == 0.0) then
+        initial_crafting_speed_modifier = player.character_crafting_speed_modifier
+        initial_running_speed_modifier = player.character_running_speed_modifier
+    end
+
 
     -- Update caffeine level, but only every decomposition_timespan ticks
     if (game.tick % decomposition_timespan == 0) then
-        if (caffeine_level > decomposition_rate * decomposition_timespan) then
-            caffeine_level = caffeine_level - decomposition_rate * decomposition_timespan
-            game.forces.player.manual_crafting_speed_modifier = initial_modifier + buffed_speed_modifier
+        if (caffeine_level[player.index] > decomposition_rate * decomposition_timespan) then
+            caffeine_level[player.index] = caffeine_level[player.index] - decomposition_rate * decomposition_timespan
+
+            player.character_crafting_speed_modifier = initial_crafting_speed_modifier + buffed_crafting_speed_modifier
+            player.character_running_speed_modifier = initial_running_speed_modifier + buffed_running_speed_modifier
         else
-            caffeine_level = 0.0
-            game.forces.player.manual_crafting_speed_modifier = initial_modifier
+            caffeine_level[player.index] = 0.0
+            player.character_crafting_speed_modifier = initial_crafting_speed_modifier
+            player.character_running_speed_modifier = initial_running_speed_modifier
         end
 
         -- Check status of autoinjector if not read yet
@@ -58,20 +76,21 @@ function onTick()
         end
 
         -- Check if the autoinjector needs to be activated
-        local player = game.players[1]
+
         if (
             player.gui.left.ppcRoot
             and player.gui.left.ppcRoot.autoInjector
             and player.gui.left.ppcRoot.autoInjector.state
             and autoinjector_enabled
-            and caffeine_level <= 81
+            and caffeine_level[player.index] < 100
         ) then
-            tryConsume()
+            tryConsume(player)
         end
-
-        updateGUI()
+        updateGUI(player)
     end
 end
+
+
 
 ---------------------------------------------------------
 -- Initialize global collections (used for the onTick method)
@@ -81,6 +100,11 @@ function onInit()
     if not global.plantations then
         global.plantations = {}
     end
+
+    for i, player in pairs(game.players) do
+        caffeine_level[player.index] = 0.0
+    end
+
     script.on_event(defines.events.on_tick, onTick)
 end
 script.on_init(onInit)
@@ -116,8 +140,7 @@ script.on_event(defines.events.on_robot_built_entity, builtEntity)
 ---------------------------------------------------------
 -- Shows the GUI for the caffeine level, if it does not
 -- exist already
-function showGUI()
-    local player = game.players[1]
+function showGUI(player)
     if player.gui.left.ppcRoot == nil then
         player.gui.left.add{type = "frame", name = "ppcRoot", direction = "horizontal"}
         player.gui.left.ppcRoot.add{type = "sprite-button", name = "drinkButton", sprite = "item/mug-of-coffee"}
@@ -141,21 +164,20 @@ end
 
 ---------------------------------------------------------
 -- Updates the GUI for the caffeine level
-function updateGUI()
-    showGUI()
-
-    local player = game.players[1]
+function updateGUI(player)
+    showGUI(player)
     if player.gui.left.ppcRoot ~= nil then
-        player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(caffeine_level), "%")
+        player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(caffeine_level[player.index]), "%")
     end
 end
 
 ---------------------------------------------------------
 -- Handles a click event on the GUI button for "drinking"
 function onGUIClick(event)
+    local player = game.players[event.player_index]
     if (event.element.name == "drinkButton") then
-        tryConsume()
-        updateGUI()
+        tryConsume(player)
+        updateGUI(player)
     end
 end
 script.on_event(defines.events.on_gui_click, onGUIClick)
@@ -166,38 +188,40 @@ script.on_event(defines.events.on_gui_click, onGUIClick)
 -- caffeine level back to 100, where partial multiples
 -- count as a full mug. E.g if the level is 85 and every
 -- mug gives 20, then it's still two full mugs
-function tryConsume()
-    local nrToConsume = math.ceil((100 - caffeine_level) / level_per_mug)
+function tryConsume(player)
+    if (caffeine_level[player.index] < 99.01) then
+        local nrToConsume = math.ceil((100 - caffeine_level[player.index]) / level_per_mug)
 
-    -- Check quickbar first
-    local inv = game.players[1].get_inventory(defines.inventory.player_quickbar)
-    local count = inv.get_item_count("mug-of-coffee")
+        -- Check quickbar first
+        local inv = player.get_inventory(defines.inventory.player_quickbar)
+        local count = inv.get_item_count("mug-of-coffee")
 
-    if (count > 0) then
-        if (count >= nrToConsume) then
-            inv.remove({name = "mug-of-coffee", count = nrToConsume})
-            caffeine_level = 100.0
-            nrToConsume = 0
-        elseif (count > 0) then
-            inv.remove({name = "mug-of-coffee", count = count})
-            nrToConsume = nrToConsume - count
-            caffeine_level = caffeine_level + count * level_per_mug
+        if (count > 0) then
+            if (count >= nrToConsume) then
+                inv.remove({name = "mug-of-coffee", count = nrToConsume})
+                caffeine_level[player.index] = 100.0
+                nrToConsume = 0
+            elseif (count > 0) then
+                inv.remove({name = "mug-of-coffee", count = count})
+                nrToConsume = nrToConsume - count
+                caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
+            end
         end
-    end
 
-    -- Now check main inv
-    local inv = game.players[1].get_inventory(defines.inventory.player_main)
-    local count = inv.get_item_count("mug-of-coffee")
+        -- Now check main inv
+        local inv = player.get_inventory(defines.inventory.player_main)
+        local count = inv.get_item_count("mug-of-coffee")
 
-    if (count > 0 and nrToConsume > 0) then
-        if (count >= nrToConsume) then
-            inv.remove({name = "mug-of-coffee", count = nrToConsume})
-            caffeine_level = 100.0
-            nrToConsume = 0
-        elseif (count > 0) then
-            inv.remove({name = "mug-of-coffee", count = count})
-            nrToConsume = nrToConsume - count
-            caffeine_level = caffeine_level + count * level_per_mug
+        if (count > 0 and nrToConsume > 0) then
+            if (count >= nrToConsume) then
+                inv.remove({name = "mug-of-coffee", count = nrToConsume})
+                caffeine_level[player.index] = 100.0
+                nrToConsume = 0
+            elseif (count > 0) then
+                inv.remove({name = "mug-of-coffee", count = count})
+                nrToConsume = nrToConsume - count
+                caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
+            end
         end
     end
 end
@@ -205,8 +229,10 @@ end
 ---------------------------------------------------------
 -- Handles the custom hotkey for consuming coffee
 function onHotkey(event)
-    tryConsume()
-    updateGUI()
+    local player = game.players[event.player_index]
+
+    tryConsume(player)
+    updateGUI(player)
 end
 script.on_event("ppc-consume", onHotkey)
 
@@ -219,6 +245,8 @@ function onResearchFinished(event)
         autoinjector_enabled = true
     end
 
-    showGUI()
+    for i, player in pairs(game.players) do
+        showGUI(player)
+    end
 end
 script.on_event(defines.events.on_research_finished, onResearchFinished)
