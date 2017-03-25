@@ -21,6 +21,7 @@ local caffeine_level = {} -- Holds the current caffeine level
 local initial_crafting_speed_modifier = 0.0 -- Holds the initial crafting speed modifier
 local initial_running_speed_modifier = 0.0 -- Holds the initial speed modifier
 local autoinjector_enabled = nil -- Holds the status if the autoinjector is enabled
+local rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
 ---------------------------------------------------------
 -- Is called in each tick and handles the "mining" process of berries
@@ -91,6 +92,7 @@ function updateCaffeineLevel(player)
         ) then
             tryConsume(player)
         end
+
         updateGUI(player)
     end
 end
@@ -122,6 +124,7 @@ function onLoad()
         global.plantations = {}
     end
     script.on_event(defines.events.on_tick, onTick)
+    rebuild_gui = true
 end
 script.on_load(onLoad)
 
@@ -146,6 +149,11 @@ script.on_event(defines.events.on_robot_built_entity, builtEntity)
 -- Shows the GUI for the caffeine level, if it does not
 -- exist already
 function showGUI(player)
+    if rebuild_gui and player.gui.left.ppcRoot ~= nil then
+        player.gui.left.ppcRoot.destroy()
+        rebuild_gui = false
+    end
+
     if player.gui.left.ppcRoot == nil then
         player.gui.left.add{type = "frame", name = "ppcRoot", direction = "horizontal"}
         player.gui.left.ppcRoot.add{type = "sprite-button", name = "drinkButton", sprite = "item/mug-of-coffee"}
@@ -157,6 +165,7 @@ function showGUI(player)
         player.gui.left.ppcRoot.drinkButton.style.minimal_height = 32
 
         player.gui.left.ppcRoot.caffeineLevelLabel.style.top_padding = 5
+        player.gui.left.ppcRoot.caffeineLevelLabel.style.minimal_width = 35
     end
 
     if (autoinjector_enabled and player.gui.left.ppcRoot.autoInjector == nil) then
@@ -164,6 +173,7 @@ function showGUI(player)
         player.gui.left.ppcRoot.add{type = "checkbox", name = "autoInjector", state = false}
         player.gui.left.ppcRoot.autoInjectorLabel.style.top_padding = 5
         player.gui.left.ppcRoot.autoInjector.style.top_padding = 10
+        player.gui.left.ppcRoot.style.minimal_width = 160
     end
 end
 
