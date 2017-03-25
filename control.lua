@@ -16,12 +16,12 @@ local buffed_running_speed_modifier = 0.4 -- Defines by how much the
 local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
                                            -- speed is buffed (additional to 100%)
 
--- Variables, local to the scope
-local caffeine_level = {} -- Holds the current caffeine level
-local initial_crafting_speed_modifier = 0.0 -- Holds the initial crafting speed modifier
-local initial_running_speed_modifier = 0.0 -- Holds the initial running speed modifier
-local autoinjector_enabled = nil -- Holds the status if the autoinjector is enabled
-local rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
+-- Variables, global to the global table provided by factorio for each mod
+global.caffeine_level = {} -- Holds the current caffeine level
+global.initial_crafting_speed_modifier = 0.0 -- Holds the initial crafting speed modifier
+global.initial_running_speed_modifier = 0.0 -- Holds the initial running speed modifier
+global.autoinjector_enabled = nil -- Holds the status if the autoinjector is enabled
+global.rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
 ---------------------------------------------------------
 -- Is called in each tick and handles the "mining" process of berries
@@ -48,8 +48,8 @@ function onTick()
 end
 
 function updateCaffeineLevel(player)
-    if (caffeine_level[player.index] == nil) then
-        caffeine_level[player.index] = 0.0
+    if (global.caffeine_level[player.index] == nil) then
+        global.caffeine_level[player.index] = 0.0
     end
 
     -- The first time the caffeine level is zero (usually during game start) we
@@ -58,28 +58,28 @@ function updateCaffeineLevel(player)
     -- change the speed modifiers. For this mod alone it's fine
     -- @todo Figure out if this breaks when player join with different caffeine
     -- levels, so they overwrite the initial modifiers. Maybe a per-player approach?
-    if (caffeine_level[player.index] == 0.0) then
-        initial_crafting_speed_modifier = player.character_crafting_speed_modifier
-        initial_running_speed_modifier = player.character_running_speed_modifier
+    if (global.caffeine_level[player.index] == 0.0) then
+        global.initial_crafting_speed_modifier = player.character_crafting_speed_modifier
+        global.initial_running_speed_modifier = player.character_running_speed_modifier
     end
 
 
     -- Update caffeine level, but only every decomposition_timespan ticks
     if (game.tick % decomposition_timespan == 0) then
-        if (caffeine_level[player.index] > decomposition_rate * decomposition_timespan) then
-            caffeine_level[player.index] = caffeine_level[player.index] - decomposition_rate * decomposition_timespan
+        if (global.caffeine_level[player.index] > decomposition_rate * decomposition_timespan) then
+            global.caffeine_level[player.index] = global.caffeine_level[player.index] - decomposition_rate * decomposition_timespan
 
-            player.character_crafting_speed_modifier = initial_crafting_speed_modifier + buffed_crafting_speed_modifier
-            player.character_running_speed_modifier = initial_running_speed_modifier + buffed_running_speed_modifier
+            player.character_crafting_speed_modifier = global.initial_crafting_speed_modifier + buffed_crafting_speed_modifier
+            player.character_running_speed_modifier = global.initial_running_speed_modifier + buffed_running_speed_modifier
         else
-            caffeine_level[player.index] = 0.0
-            player.character_crafting_speed_modifier = initial_crafting_speed_modifier
-            player.character_running_speed_modifier = initial_running_speed_modifier
+            global.caffeine_level[player.index] = 0.0
+            player.character_crafting_speed_modifier = global.initial_crafting_speed_modifier
+            player.character_running_speed_modifier = global.initial_running_speed_modifier
         end
 
         -- Check status of autoinjector if not read yet
-        if (autoinjector_enabled == nil) then
-            autoinjector_enabled = game.forces.player.technologies["ppc-auto-consumption"].researched
+        if (global.autoinjector_enabled == nil) then
+            global.autoinjector_enabled = game.forces.player.technologies["ppc-auto-consumption"].researched
         end
 
         -- Check if the autoinjector needs to be activated
@@ -89,8 +89,8 @@ function updateCaffeineLevel(player)
             player.gui.left.ppcRoot
             and player.gui.left.ppcRoot.autoInjector
             and player.gui.left.ppcRoot.autoInjector.state
-            and autoinjector_enabled
-            and caffeine_level[player.index] < (100 - level_per_mug + decomposition_rate * 2)
+            and global.autoinjector_enabled
+            and global.caffeine_level[player.index] < (100 - level_per_mug + decomposition_rate * 2)
         ) then
             tryConsume(player)
         end
@@ -111,7 +111,7 @@ function onInit()
     end
 
     for i, player in pairs(game.players) do
-        caffeine_level[player.index] = 0.0
+        global.caffeine_level[player.index] = 0.0
     end
 
     script.on_event(defines.events.on_tick, onTick)
@@ -126,7 +126,7 @@ function onLoad()
         global.plantations = {}
     end
     script.on_event(defines.events.on_tick, onTick)
-    rebuild_gui = true
+    global.rebuild_gui = true
 end
 script.on_load(onLoad)
 
@@ -151,9 +151,9 @@ script.on_event(defines.events.on_robot_built_entity, builtEntity)
 -- Shows the GUI for the caffeine level, if it does not
 -- exist already
 function showGUI(player)
-    if rebuild_gui and player.gui.left.ppcRoot ~= nil then
+    if global.rebuild_gui and player.gui.left.ppcRoot ~= nil then
         player.gui.left.ppcRoot.destroy()
-        rebuild_gui = false
+        global.rebuild_gui = false
     end
 
     if player.gui.left.ppcRoot == nil then
@@ -170,7 +170,7 @@ function showGUI(player)
         player.gui.left.ppcRoot.caffeineLevelLabel.style.minimal_width = 35
     end
 
-    if (autoinjector_enabled and player.gui.left.ppcRoot.autoInjector == nil) then
+    if (global.autoinjector_enabled and player.gui.left.ppcRoot.autoInjector == nil) then
         player.gui.left.ppcRoot.add{type = "label", name = "autoInjectorLabel", caption = "Auto"}
         player.gui.left.ppcRoot.add{type = "checkbox", name = "autoInjector", state = false}
         player.gui.left.ppcRoot.autoInjectorLabel.style.top_padding = 5
@@ -184,7 +184,7 @@ end
 function updateGUI(player)
     showGUI(player)
     if player.gui.left.ppcRoot ~= nil then
-        player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(caffeine_level[player.index]), "%")
+        player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(global.caffeine_level[player.index]), "%")
     end
 end
 
@@ -206,7 +206,7 @@ script.on_event(defines.events.on_gui_click, onGUIClick)
 -- count as a full mug. E.g if the level is 85 and every
 -- mug gives 20, then it's still two full mugs
 function tryConsume(player)
-    local nrToConsume = math.ceil((100 - caffeine_level[player.index]) / level_per_mug)
+    local nrToConsume = math.ceil((100 - global.caffeine_level[player.index]) / level_per_mug)
 
     -- Check quickbar first
     local inv = player.get_inventory(defines.inventory.player_quickbar)
@@ -215,12 +215,12 @@ function tryConsume(player)
     if (count > 0) then
         if (count >= nrToConsume) then
             inv.remove({name = "mug-of-coffee", count = nrToConsume})
-            caffeine_level[player.index] = 100.0
+            global.caffeine_level[player.index] = 100.0
             nrToConsume = 0
         elseif (count > 0) then
             inv.remove({name = "mug-of-coffee", count = count})
             nrToConsume = nrToConsume - count
-            caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
+            global.caffeine_level[player.index] = global.caffeine_level[player.index] + count * level_per_mug
         end
     end
 
@@ -231,12 +231,12 @@ function tryConsume(player)
     if (count > 0 and nrToConsume > 0) then
         if (count >= nrToConsume) then
             inv.remove({name = "mug-of-coffee", count = nrToConsume})
-            caffeine_level[player.index] = 100.0
+            global.caffeine_level[player.index] = 100.0
             nrToConsume = 0
         elseif (count > 0) then
             inv.remove({name = "mug-of-coffee", count = count})
             nrToConsume = nrToConsume - count
-            caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
+            global.caffeine_level[player.index] = global.caffeine_level[player.index] + count * level_per_mug
         end
     end
 end
@@ -257,7 +257,7 @@ script.on_event("ppc-consume", onHotkey)
 -- injector
 function onResearchFinished(event)
     if (event.research.name == "ppc-auto-consumption") then
-        autoinjector_enabled = true
+        global.autoinjector_enabled = true
     end
 
     for i, player in pairs(game.players) do
