@@ -7,7 +7,7 @@ local growth_amount = 1 -- Defines how many berries grow in one
                         -- cycle
 local decomposition_rate = 0.01  -- Defines how quickly the caffeine
                                  -- level decreases (per tick)
-local decomposition_timespan = 1 -- Defines how often (in ticks)
+local decomposition_timespan = 5 -- Defines how often (in ticks)
                                  -- the caffeine level is updated
 local level_per_mug = 2 -- Defines by how much the caffeine level
                         -- is raised for each mug
