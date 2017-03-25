@@ -39,10 +39,10 @@ function onTick()
         end
     end
 
-    -- The first time the caffeine level is zero (usually at game start), we save the
-    -- initial modifier
     for i, player in pairs(game.players) do
-        updateCaffeineLevel(player)
+        if (player.connected and player.character ~= nil) then
+            updateCaffeineLevel(player)
+        end
     end
 end
 
@@ -51,6 +51,10 @@ function updateCaffeineLevel(player)
         caffeine_level[player.index] = 0.0
     end
 
+    -- The first time the caffeine level is zero (usually during game start) we
+    -- save the speed modifiers as their base level
+    -- @todo Figure out if this breaks in conjunction with other mods that
+    -- change the speed modifiers. For this mod alone it's fine
     if (caffeine_level[player.index] == 0.0) then
         initial_crafting_speed_modifier = player.character_crafting_speed_modifier
         initial_running_speed_modifier = player.character_running_speed_modifier
