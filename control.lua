@@ -80,12 +80,14 @@ function updateCaffeineLevel(player)
         end
 
         -- Check if the autoinjector needs to be activated
+        -- To avoid the display flickering between values, we update just before
+        -- the level sinks below that of one full cup missing
         if (
             player.gui.left.ppcRoot
             and player.gui.left.ppcRoot.autoInjector
             and player.gui.left.ppcRoot.autoInjector.state
             and autoinjector_enabled
-            and caffeine_level[player.index] < 100
+            and caffeine_level[player.index] < (100 - level_per_mug + decomposition_rate * 2)
         ) then
             tryConsume(player)
         end
@@ -192,39 +194,37 @@ script.on_event(defines.events.on_gui_click, onGUIClick)
 -- count as a full mug. E.g if the level is 85 and every
 -- mug gives 20, then it's still two full mugs
 function tryConsume(player)
-    if (caffeine_level[player.index] < 99.01) then
-        local nrToConsume = math.ceil((100 - caffeine_level[player.index]) / level_per_mug)
+    local nrToConsume = math.ceil((100 - caffeine_level[player.index]) / level_per_mug)
 
-        -- Check quickbar first
-        local inv = player.get_inventory(defines.inventory.player_quickbar)
-        local count = inv.get_item_count("mug-of-coffee")
+    -- Check quickbar first
+    local inv = player.get_inventory(defines.inventory.player_quickbar)
+    local count = inv.get_item_count("mug-of-coffee")
 
-        if (count > 0) then
-            if (count >= nrToConsume) then
-                inv.remove({name = "mug-of-coffee", count = nrToConsume})
-                caffeine_level[player.index] = 100.0
-                nrToConsume = 0
-            elseif (count > 0) then
-                inv.remove({name = "mug-of-coffee", count = count})
-                nrToConsume = nrToConsume - count
-                caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
-            end
+    if (count > 0) then
+        if (count >= nrToConsume) then
+            inv.remove({name = "mug-of-coffee", count = nrToConsume})
+            caffeine_level[player.index] = 100.0
+            nrToConsume = 0
+        elseif (count > 0) then
+            inv.remove({name = "mug-of-coffee", count = count})
+            nrToConsume = nrToConsume - count
+            caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
         end
+    end
 
-        -- Now check main inv
-        local inv = player.get_inventory(defines.inventory.player_main)
-        local count = inv.get_item_count("mug-of-coffee")
+    -- Now check main inv
+    local inv = player.get_inventory(defines.inventory.player_main)
+    local count = inv.get_item_count("mug-of-coffee")
 
-        if (count > 0 and nrToConsume > 0) then
-            if (count >= nrToConsume) then
-                inv.remove({name = "mug-of-coffee", count = nrToConsume})
-                caffeine_level[player.index] = 100.0
-                nrToConsume = 0
-            elseif (count > 0) then
-                inv.remove({name = "mug-of-coffee", count = count})
-                nrToConsume = nrToConsume - count
-                caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
-            end
+    if (count > 0 and nrToConsume > 0) then
+        if (count >= nrToConsume) then
+            inv.remove({name = "mug-of-coffee", count = nrToConsume})
+            caffeine_level[player.index] = 100.0
+            nrToConsume = 0
+        elseif (count > 0) then
+            inv.remove({name = "mug-of-coffee", count = count})
+            nrToConsume = nrToConsume - count
+            caffeine_level[player.index] = caffeine_level[player.index] + count * level_per_mug
         end
     end
 end
