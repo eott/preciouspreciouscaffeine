@@ -14,12 +14,12 @@ local level_per_mug = 5 -- Defines by how much the caffeine level
 local buffed_running_speed_modifier = 0.4 -- Defines by how much the
                                           -- running speed is buffed (additional to 100%)
 local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
-                                           -- speed is buffed
+                                           -- speed is buffed (additional to 100%)
 
 -- Variables, local to the scope
 local caffeine_level = {} -- Holds the current caffeine level
 local initial_crafting_speed_modifier = 0.0 -- Holds the initial crafting speed modifier
-local initial_running_speed_modifier = 0.0 -- Holds the initial speed modifier
+local initial_running_speed_modifier = 0.0 -- Holds the initial running speed modifier
 local autoinjector_enabled = nil -- Holds the status if the autoinjector is enabled
 local rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
@@ -56,6 +56,8 @@ function updateCaffeineLevel(player)
     -- save the speed modifiers as their base level
     -- @todo Figure out if this breaks in conjunction with other mods that
     -- change the speed modifiers. For this mod alone it's fine
+    -- @todo Figure out if this breaks when player join with different caffeine
+    -- levels, so they overwrite the initial modifiers. Maybe a per-player approach?
     if (caffeine_level[player.index] == 0.0) then
         initial_crafting_speed_modifier = player.character_crafting_speed_modifier
         initial_running_speed_modifier = player.character_running_speed_modifier
