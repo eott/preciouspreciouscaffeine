@@ -120,13 +120,8 @@ script.on_init(onInit)
 
 ---------------------------------------------------------
 -- Register the onTick handler with the tick game event
--- and initialize global collections if not done already
 function onLoad()
-    if not global.plantations then
-        global.plantations = {}
-    end
     script.on_event(defines.events.on_tick, onTick)
-    global.rebuild_gui = true
 end
 script.on_load(onLoad)
 
