@@ -51,7 +51,6 @@ data:extend({
     name = "mug-of-coffee",
     icon = "__PreciousPreciousCaffeine__/graphics/icon_mug_of_coffee.png",
     flags = { "goes-to-main-inventory" },
-    subgroup = "barrel",
     stack_size= 100,
   }
 
