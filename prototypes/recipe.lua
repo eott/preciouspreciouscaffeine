@@ -64,4 +64,32 @@ data:extend({
     result = "mug-of-coffee",
     result_count = 5
   },
+
+  {
+    type = "recipe",
+    name = "coffee-crate",
+    enabled = "false",
+    ingredients = 
+    {
+      {"coffee-powder",20},
+      {"wood",6}
+    },
+    result = "coffee-crate"
+  },
+
+  {
+    type = "recipe",
+    name = "cryo-shipment",
+    enabled = "false",
+    ingredients = 
+    {
+      {"coffee-crate",50},
+      {"fusion-reactor-equipment",1},
+      {"battery",100},
+      {"advanced-circuit",100},
+      {"plastic-bar",200},
+      {"copper-cable",1000}
+    },
+    result = "cryo-shipment"
+  },
 })

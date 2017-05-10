@@ -53,6 +53,24 @@ data:extend({
     flags = { "goes-to-main-inventory" },
     subgroup = "intermediate-product",
     stack_size= 100,
+  },
+
+  {
+    type = "item",
+    name = "coffee-crate",
+    icon = "__PreciousPreciousCaffeine__/graphics/coffee-crate.png",
+    flags = { "goes-to-main-inventory" },
+    subgroup = "intermediate-product",
+    stack_size= 50,
+  },
+
+  {
+    type = "item",
+    name = "cryo-shipment",
+    icon = "__PreciousPreciousCaffeine__/graphics/cryo-shipment.png",
+    flags = { "goes-to-main-inventory" },
+    subgroup = "intermediate-product",
+    stack_size= 5,
   }
 
 })

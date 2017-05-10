@@ -25,6 +25,14 @@ data:extend({
         {
             type = "unlock-recipe",
             recipe = "mug-of-coffee"
+        },
+        {
+            type = "unlock-recipe",
+            recipe = "coffee-crate"
+        },
+        {
+            type = "unlock-recipe",
+            recipe = "cryo-shipment"
         }
       },
       prerequisites = {"automation-2"},
