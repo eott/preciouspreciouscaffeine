@@ -70,7 +70,39 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/cryo-shipment.png",
     flags = { "goes-to-main-inventory" },
     subgroup = "intermediate-product",
-    stack_size= 5,
-  }
+    stack_size= 1,
+  },
 
+  {
+    type = "ammo",
+    name = "aaa-tank-shell",
+    icon = "__PreciousPreciousCaffeine__/graphics/aaa-tank-shell.png",
+    flags = {"goes-to-main-inventory"},
+    ammo_type =
+    {
+      category = "cannon-shell",
+      target_type = "direction",
+      action =
+      {
+        type = "direct",
+        action_delivery =
+        {
+          type = "projectile",
+          projectile = "aaa-tank-shell-flying",
+          starting_speed = 1,
+          direction_deviation = 0.1,
+          range_deviation = 0.1,
+          max_range = 50,
+          source_effects =
+          {
+            type = "create-explosion",
+            entity_name = "explosion-gunshot"
+          },
+        }
+      },
+    },
+    subgroup = "ammo",
+    order = "d[cannon-shell]-c[explosive]",
+    stack_size = 200
+  },
 })
