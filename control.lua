@@ -20,7 +20,6 @@ local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
 global.caffeine_level = {} -- Holds the current caffeine level
 global.initial_crafting_speed_modifier = 0.0 -- Holds the initial crafting speed modifier
 global.initial_running_speed_modifier = 0.0 -- Holds the initial running speed modifier
-global.autoinjector_enabled = nil -- Holds the status if the autoinjector is enabled
 global.rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
 ---------------------------------------------------------
@@ -77,11 +76,6 @@ function updateCaffeineLevel(player)
             player.character_running_speed_modifier = global.initial_running_speed_modifier
         end
 
-        -- Check status of autoinjector if not read yet
-        if (global.autoinjector_enabled == nil) then
-            global.autoinjector_enabled = game.forces.player.technologies["ppc-auto-consumption"].researched
-        end
-
         -- Check if the autoinjector needs to be activated
         -- To avoid the display flickering between values, we update just before
         -- the level sinks below that of one full cup missing
@@ -89,7 +83,7 @@ function updateCaffeineLevel(player)
             player.gui.left.ppcRoot
             and player.gui.left.ppcRoot.autoInjector
             and player.gui.left.ppcRoot.autoInjector.state
-            and global.autoinjector_enabled
+            and game.forces.player.technologies["ppc-auto-consumption"].researched
             and global.caffeine_level[player.index] < (100 - level_per_mug + decomposition_rate * 2)
         ) then
             tryConsume(player)
@@ -165,7 +159,10 @@ function showGUI(player)
         player.gui.left.ppcRoot.caffeineLevelLabel.style.minimal_width = 35
     end
 
-    if (global.autoinjector_enabled and player.gui.left.ppcRoot.autoInjector == nil) then
+    if (
+        game.forces.player.technologies["ppc-auto-consumption"].researched
+        and player.gui.left.ppcRoot.autoInjector == nil
+    ) then
         player.gui.left.ppcRoot.add{type = "label", name = "autoInjectorLabel", caption = "Auto"}
         player.gui.left.ppcRoot.add{type = "checkbox", name = "autoInjector", state = false}
         player.gui.left.ppcRoot.autoInjectorLabel.style.top_padding = 5
@@ -230,17 +227,11 @@ function onHotkey(event)
 end
 script.on_event("ppc-consume", onHotkey)
 
----------------------------------------------------------
--- Handles the research finished event and employs custom
--- functionality for research effects, namely the auto
--- injector
+-------------------------------------------------------------------------------
+-- Force rebuild the PPC GUI when the auto injector research is finished
 function onResearchFinished(event)
     if (event.research.name == "ppc-auto-consumption") then
-        global.autoinjector_enabled = true
-    end
-
-    for i, player in pairs(game.players) do
-        showGUI(player)
+        global.rebuild_gui = true
     end
 end
 script.on_event(defines.events.on_research_finished, onResearchFinished)
