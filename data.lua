@@ -10,9 +10,6 @@ data:extend({
     type = "custom-input",
     name = "ppc-consume",
     key_sequence = "CONTROL + R",
-    consuming = "script-only"
+    consuming = "game-only"
   }
 })
-
--- Add aaa tank shell to return items of rocket launch
-table.insert(data.raw["rocket-silo-rocket"]["rocket-silo-rocket"]["result_items"], {"aaa-tank-shell", 30, "cryo-shipment"})

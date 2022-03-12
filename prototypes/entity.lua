@@ -3,6 +3,7 @@ data:extend({
     type = "container",
     name = "coffee-plantation",
     icon = "__PreciousPreciousCaffeine__/graphics/icon_coffee_plantation.png",
+    icon_size = 32,
     flags = {"placeable-neutral", "player-creation"},
     minable = {mining_time = 1, result = "coffee-plantation"},
     max_health = 150,

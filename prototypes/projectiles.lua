@@ -66,7 +66,7 @@ data:extend({
           action =
           {
             type = "area",
-            perimeter = 20,
+            radius = 20,
             entity_flags = {"breaths-air"},
             action_delivery =
             {

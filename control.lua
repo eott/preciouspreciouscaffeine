@@ -203,24 +203,8 @@ script.on_event(defines.events.on_gui_click, onGUIClick)
 function tryConsume(player)
     local nrToConsume = math.ceil((100 - global.caffeine_level[player.index]) / level_per_mug)
 
-    -- Check quickbar first
-    local inv = player.get_inventory(defines.inventory.player_quickbar)
-    local count = inv.get_item_count("mug-of-coffee")
-
-    if (count > 0) then
-        if (count >= nrToConsume) then
-            inv.remove({name = "mug-of-coffee", count = nrToConsume})
-            global.caffeine_level[player.index] = 100.0
-            nrToConsume = 0
-        elseif (count > 0) then
-            inv.remove({name = "mug-of-coffee", count = count})
-            nrToConsume = nrToConsume - count
-            global.caffeine_level[player.index] = global.caffeine_level[player.index] + count * level_per_mug
-        end
-    end
-
     -- Now check main inv
-    local inv = player.get_inventory(defines.inventory.player_main)
+    local inv = player.get_inventory(defines.inventory.character_main)
     local count = inv.get_item_count("mug-of-coffee")
 
     if (count > 0 and nrToConsume > 0) then
