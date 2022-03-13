@@ -1,10 +1,5 @@
 ---------------------------------------------------------
 -- Constants, local to the scope
-local berry_plucking_timespan = 240 -- Defines how many ticks
-                                    -- pass for an update in the
-                                    -- coffee plantation
-local growth_amount = 1 -- Defines how many berries grow in one
-                        -- cycle
 local decomposition_rate = 0.025  -- Defines how quickly the caffeine
                                   -- level decreases (per tick)
 local decomposition_timespan = 5 -- Defines how often (in ticks)
@@ -21,22 +16,8 @@ global.caffeine_level = {} -- Holds the current caffeine level
 global.rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
 ---------------------------------------------------------
--- Is called in each tick and handles the "mining" process of berries
--- as well as the caffeine level update
+-- Is called in each tick and handles the caffeine level update
 function onTick()
-    -- Check if the necessary timespan has passed
-    if (game.tick % berry_plucking_timespan == 0) then
-        -- Iterate over the saved entity references and update each
-        for index, plantation in pairs(global.plantations) do
-            if plantation and plantation.valid then
-                local inventory = plantation.get_inventory(defines.inventory.item_main)
-                inventory.insert({name = "coffee-berries", count = growth_amount})
-            else
-                table.remove(global.plantations, index)
-            end
-        end
-    end
-
     for i, player in pairs(game.players) do
         if (player.connected and player.character ~= nil) then
             updateCaffeineLevel(player)
@@ -112,10 +93,6 @@ end
 -- and register the onTick handler for the first time (has to
 -- be done on every load afterwards)
 function onInit()
-    if not global.plantations then
-        global.plantations = {}
-    end
-
     for i, player in pairs(game.players) do
         initCaffeineLevel(player)
     end
@@ -130,23 +107,6 @@ function onLoad()
     script.on_event(defines.events.on_tick, onTick)
 end
 script.on_load(onLoad)
-
-
----------------------------------------------------------
--- Register the buildEntity handler with the built_entity and
--- robot_built_entity game events.
--- Checks if a plantation was built and if so, saves a reference
--- in the global collection so it can be handled in the onTick
--- method.
-function builtEntity(event)
-    local ent = event.created_entity
-    local name = ent.name
-    if name == "coffee-plantation" then
-        table.insert(global.plantations, ent)
-    end
-end
-script.on_event(defines.events.on_built_entity, builtEntity)
-script.on_event(defines.events.on_robot_built_entity, builtEntity)
 
 ---------------------------------------------------------
 -- Shows the GUI for the caffeine level, if it does not

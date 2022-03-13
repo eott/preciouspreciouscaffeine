@@ -1,5 +1,20 @@
 data:extend({
+  {
+    type = "item-subgroup",
+    name = "plantation",
+    group = "intermediate-products",
+    order = "z-a-plantation"
+  },
 
+  {
+    type = "item-subgroup",
+    name = "coffee-intermediates",
+    group = "intermediate-products",
+    order = "z-b-coffee-intermediates"
+  },
+})
+
+data:extend({
   {
     type = "item",
     name = "coffee-plantation",
@@ -17,7 +32,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_coffee_berries.png",
     icon_size = 32,
     flags = {},
-    subgroup = "raw-material",
+    subgroup = "plantation",
     stack_size= 200,
   },
 
@@ -27,7 +42,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_coffee_beans.png",
     icon_size = 32,
     flags = {},
-    subgroup = "intermediate-product",
+    subgroup = "coffee-intermediates",
     stack_size= 200,
   },
 
@@ -37,7 +52,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_roasted_coffee_beans.png",
     icon_size = 32,
     flags = {},
-    subgroup = "intermediate-product",
+    subgroup = "coffee-intermediates",
     stack_size= 200,
   },
 
@@ -47,7 +62,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_coffee_powder.png",
     icon_size = 32,
     flags = {},
-    subgroup = "intermediate-product",
+    subgroup = "coffee-intermediates",
     stack_size= 50,
   },
 
@@ -57,7 +72,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_mug_of_coffee.png",
     icon_size = 32,
     flags = {},
-    subgroup = "intermediate-product",
+    subgroup = "coffee-intermediates",
     stack_size= 100,
   },
 
@@ -67,7 +82,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/coffee-crate.png",
     icon_size = 32,
     flags = {},
-    subgroup = "intermediate-product",
+    subgroup = "coffee-intermediates",
     stack_size= 50,
   },
 
@@ -77,7 +92,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/cryo-shipment.png",
     icon_size = 32,
     flags = {},
-    subgroup = "intermediate-product",
+    subgroup = "coffee-intermediates",
     stack_size= 1,
     rocket_launch_product = {
       name = "aaa-tank-shell",

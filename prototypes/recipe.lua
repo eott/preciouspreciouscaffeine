@@ -1,5 +1,12 @@
 data:extend({
   {
+    type = "recipe-category",
+    name = "plantation"
+  },
+})
+
+data:extend({
+  {
     type = "recipe",
     name = "coffee-plantation",
     enabled = "false",
@@ -11,6 +18,18 @@ data:extend({
       {"inserter",2}
     },
     result = "coffee-plantation"
+  },
+
+  {
+    type = "recipe",
+    name = "coffee-berries",
+    enabled = "false",
+    category = "plantation",
+    ingredients = {},
+    result = "coffee-berries",
+    energy_required = 5,
+    result_count = 1,
+    always_show_made_in = true,
   },
 
   {

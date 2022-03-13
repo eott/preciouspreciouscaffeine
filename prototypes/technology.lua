@@ -12,6 +12,10 @@ data:extend({
         },
         {
             type = "unlock-recipe",
+            recipe = "coffee-berries"
+        },
+        {
+            type = "unlock-recipe",
             recipe = "coffee-beans"
         },
         {
