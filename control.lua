@@ -18,8 +18,6 @@ local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
 
 -- Variables, global to the global table provided by factorio for each mod
 global.caffeine_level = {} -- Holds the current caffeine level
-global.initial_crafting_speed_modifier = 0.0 -- Holds the initial crafting speed modifier
-global.initial_running_speed_modifier = 0.0 -- Holds the initial running speed modifier
 global.rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
 ---------------------------------------------------------
@@ -46,34 +44,43 @@ function onTick()
     end
 end
 
+function addBuff(player)
+    player.character_crafting_speed_modifier = (
+        player.character_crafting_speed_modifier
+        + buffed_crafting_speed_modifier
+    )
+    player.character_running_speed_modifier = (
+        player.character_running_speed_modifier
+        + buffed_running_speed_modifier
+    )
+end
+
+function removeBuff(player)
+    player.character_crafting_speed_modifier = (
+        player.character_crafting_speed_modifier
+        - buffed_crafting_speed_modifier
+    )
+    player.character_running_speed_modifier = (
+        player.character_running_speed_modifier
+        - buffed_running_speed_modifier
+    )
+end
+
 function updateCaffeineLevel(player)
-    if (global.caffeine_level[player.index] == nil) then
-        global.caffeine_level[player.index] = 0.0
-    end
-
-    -- The first time the caffeine level is zero (usually during game start) we
-    -- save the speed modifiers as their base level
-    -- @todo Figure out if this breaks in conjunction with other mods that
-    -- change the speed modifiers. For this mod alone it's fine
-    -- @todo Figure out if this breaks when player join with different caffeine
-    -- levels, so they overwrite the initial modifiers. Maybe a per-player approach?
-    if (global.caffeine_level[player.index] == 0.0) then
-        global.initial_crafting_speed_modifier = player.character_crafting_speed_modifier
-        global.initial_running_speed_modifier = player.character_running_speed_modifier
-    end
-
+    initCaffeineLevel(player)
 
     -- Update caffeine level, but only every decomposition_timespan ticks
     if (game.tick % decomposition_timespan == 0) then
-        if (global.caffeine_level[player.index] > decomposition_rate * decomposition_timespan) then
-            global.caffeine_level[player.index] = global.caffeine_level[player.index] - decomposition_rate * decomposition_timespan
+        local old_level = global.caffeine_level[player.index]
+        global.caffeine_level[player.index] = math.max(0,
+            global.caffeine_level[player.index]
+            - decomposition_rate * decomposition_timespan
+        )
+        local new_level = global.caffeine_level[player.index]
 
-            player.character_crafting_speed_modifier = global.initial_crafting_speed_modifier + buffed_crafting_speed_modifier
-            player.character_running_speed_modifier = global.initial_running_speed_modifier + buffed_running_speed_modifier
-        else
+        if (old_level > 0.0 and new_level <= 0.0) then
             global.caffeine_level[player.index] = 0.0
-            player.character_crafting_speed_modifier = global.initial_crafting_speed_modifier
-            player.character_running_speed_modifier = global.initial_running_speed_modifier
+            removeBuff(player)
         end
 
         -- Check if the autoinjector needs to be activated
@@ -93,7 +100,12 @@ function updateCaffeineLevel(player)
     end
 end
 
-
+function initCaffeineLevel(player)
+    if (global.caffeine_level[player.index] == nil) then
+        global.caffeine_level[player.index] = 0
+        addBuff(player)
+    end
+end
 
 ---------------------------------------------------------
 -- Initialize global collections (used for the onTick method)
@@ -105,7 +117,7 @@ function onInit()
     end
 
     for i, player in pairs(game.players) do
-        global.caffeine_level[player.index] = 0.0
+        initCaffeineLevel(player)
     end
 
     script.on_event(defines.events.on_tick, onTick)
@@ -214,6 +226,10 @@ function tryConsume(player)
             nrToConsume = nrToConsume - count
             global.caffeine_level[player.index] = global.caffeine_level[player.index] + count * level_per_mug
         end
+    end
+
+    if (global.caffeine_level[player.index] > 0.0) then
+        addBuff(player)
     end
 end
 
