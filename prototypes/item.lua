@@ -38,6 +38,16 @@ data:extend({
 
   {
     type = "item",
+    name = "bio-mass",
+    icon = "__PreciousPreciousCaffeine__/graphics/icon_bio_mass.png",
+    icon_size = 32,
+    flags = {},
+    subgroup = "plantation",
+    stack_size= 200,
+  },
+
+  {
+    type = "item",
     name = "coffee-beans",
     icon = "__PreciousPreciousCaffeine__/graphics/icon_coffee_beans.png",
     icon_size = 32,

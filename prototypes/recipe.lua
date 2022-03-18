@@ -25,9 +25,25 @@ data:extend({
     name = "coffee-berries",
     enabled = "false",
     category = "plantation",
-    ingredients = {},
+    ingredients = {
+      {"bio-mass", 1},
+    },
     result = "coffee-berries",
-    energy_required = 5,
+    energy_required = 20,
+    result_count = 10,
+    always_show_made_in = true,
+  },
+
+  {
+    type = "recipe",
+    name = "wood-growth",
+    enabled = "false",
+    category = "plantation",
+    ingredients = {
+      {"bio-mass", 1},
+    },
+    result = "wood",
+    energy_required = 20,
     result_count = 1,
     always_show_made_in = true,
   },
@@ -42,7 +58,31 @@ data:extend({
     },
     result = "coffee-beans"
   },
-  
+
+  {
+    type = "recipe",
+    name = "bio-mass-from-berries",
+    enabled = "false",
+    energy_required = 2,
+    ingredients = 
+    {
+      {"coffee-berries", 8}
+    },
+    result = "bio-mass",
+  },
+
+  {
+    type = "recipe",
+    name = "bio-mass-from-wood",
+    enabled = "false",
+    energy_required = 4,
+    ingredients = 
+    {
+      {"wood", 1}
+    },
+    result = "bio-mass"
+  },
+
   {
     type = "recipe",
     name = "roasted-coffee-beans",

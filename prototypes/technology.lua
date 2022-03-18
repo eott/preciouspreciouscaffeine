@@ -14,6 +14,18 @@ data:extend({
             type = "unlock-recipe",
             recipe = "coffee-berries"
         },
+        {
+            type = "unlock-recipe",
+            recipe = "wood-growth"
+        },
+        {
+            type = "unlock-recipe",
+            recipe = "bio-mass-from-berries"
+        },
+        {
+            type = "unlock-recipe",
+            recipe = "bio-mass-from-wood"
+        },
       },
       prerequisites = {},
       unit =
@@ -83,7 +95,10 @@ data:extend({
           recipe = "cryo-shipment"
       }
     },
-    prerequisites = {"rocket-silo"},
+    prerequisites = {
+      "rocket-silo",
+      "ppc-coffee-production",
+    },
     unit =
     {
       count = 100,
