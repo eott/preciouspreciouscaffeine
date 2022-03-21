@@ -60,6 +60,10 @@ data:extend({
       },
       {
           type = "unlock-recipe",
+          recipe = "coffee-brewing"
+      },
+      {
+          type = "unlock-recipe",
           recipe = "mug-of-coffee"
       },
     },

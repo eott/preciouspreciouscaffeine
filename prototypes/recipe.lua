@@ -110,18 +110,31 @@ data:extend({
 
   {
     type = "recipe",
+    name = "coffee-brewing",
+    enabled = "false",
+    energy_required = 5,
+    category = "crafting-with-fluid",
+    ingredients = {
+      {"coffee-powder", 1},
+      {type="fluid", name="water", amount=10},
+    },
+    results = {
+      {type="fluid", name="fluid-coffee", amount=10}
+    },
+  },
+
+  {
+    type = "recipe",
     name = "mug-of-coffee",
     enabled = "false",
-    energy_required = 3,
+    energy_required = 5,
     category = "crafting-with-fluid",
-    ingredients = 
-    {
-      {"coffee-powder",1},
-      {type="fluid", name="water", amount=2.5},
-      {"stone", 5}
+    ingredients = {
+      {type="fluid", name="fluid-coffee", amount=10},
+      {"stone", 4}
     },
     result = "mug-of-coffee",
-    result_count = 5
+    result_count = 4
   },
 
   {
