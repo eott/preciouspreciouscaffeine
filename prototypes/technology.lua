@@ -85,6 +85,47 @@ data:extend({
 
   {
     type = "technology",
+    name = "ppc-caffeine-extraction",
+    icon = "__PreciousPreciousCaffeine__/graphics/tech_caffeine_extraction.png",
+    icon_size = 128,
+    effects =
+    {
+      {
+          type = "unlock-recipe",
+          recipe = "air-compression"
+      },
+      {
+          type = "unlock-recipe",
+          recipe = "co2-from-air"
+      },
+      {
+          type = "unlock-recipe",
+          recipe = "co2-from-coal"
+      },
+      {
+          type = "unlock-recipe",
+          recipe = "caffeine-extraction"
+      },
+    },
+    prerequisites = {
+      "chemical-science-pack",
+      "ppc-coffee-production",
+    },
+    unit =
+    {
+      count = 30,
+      ingredients =
+      {
+        {"automation-science-pack", 1},
+        {"logistic-science-pack", 1},
+        {"chemical-science-pack", 3},
+      },
+      time = 30
+    }
+  },
+
+  {
+    type = "technology",
     name = "ppc-interstellar-coffee",
     icon = "__PreciousPreciousCaffeine__/graphics/tech_interstellar_coffee.png",
     icon_size = 128,

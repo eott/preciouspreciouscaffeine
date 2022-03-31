@@ -139,6 +139,74 @@ data:extend({
 
   {
     type = "recipe",
+    name = "air-compression",
+    enabled = "false",
+    category = "chemistry",
+    ingredients = {},
+    energy_required = 0.5,
+    results = {
+      {type="fluid", name="fluid-compressed-air", amount=10},
+    },
+  },
+
+  {
+    type = "recipe",
+    name = "co2-from-air",
+    enabled = "false",
+    category = "chemistry",
+    icon = "__PreciousPreciousCaffeine__/graphics/fluid_co2.png",
+    icon_size = 64,
+    energy_required = 5,
+    ingredients = {
+      {type="fluid", name="fluid-compressed-air", amount=500},
+    },
+    results = {
+      {type="fluid", name="fluid-liquid-co2", amount=1},
+      {type="fluid", name="fluid-compressed-air", amount=300},
+    },
+    main_product = "fluid-liquid-co2",
+  },
+
+  {
+    type = "recipe",
+    name = "co2-from-coal",
+    enabled = "false",
+    category = "chemistry",
+    icon = "__PreciousPreciousCaffeine__/graphics/fluid_co2.png",
+    icon_size = 64,
+    energy_required = 5,
+    ingredients = {
+      {type="fluid", name="fluid-compressed-air", amount=100},
+      {type="item", name="coal", amount=2},
+    },
+    results = {
+      {type="fluid", name="fluid-liquid-co2", amount=2},
+    },
+    main_product = "fluid-liquid-co2",
+  },
+
+  {
+    type = "recipe",
+    name = "caffeine-extraction",
+    enabled = "false",
+    category = "chemistry",
+    icon = "__PreciousPreciousCaffeine__/graphics/tech_caffeine_extraction.png",
+    icon_size = 128,
+    energy_required = 10,
+    ingredients = {
+      {type="fluid", name="fluid-liquid-co2", amount=100},
+      {type="item", name="coffee-beans", amount=24},
+    },
+    results = {
+      {type="fluid", name="fluid-liquid-co2", amount=99},
+      {type="item", name="caffeine", amount=2},
+      {type="item", name="bio-mass", amount=3},
+    },
+    main_product = "caffeine",
+  },
+
+  {
+    type = "recipe",
     name = "coffee-crate",
     enabled = "false",
     ingredients = 
