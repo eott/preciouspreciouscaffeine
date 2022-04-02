@@ -1,11 +1,17 @@
 ---------------------------------------------------------
 -- Constants, local to the scope
-local decomposition_rate = 0.025  -- Defines how quickly the caffeine
-                                  -- level decreases (per tick)
+local decomposition_rate = 0.0625  -- Defines how quickly the caffeine
+                                   -- level decreases (per tick)
 local decomposition_timespan = 5 -- Defines how often (in ticks)
                                  -- the caffeine level is updated
-local level_per_mug = 5 -- Defines by how much the caffeine level
-                        -- is raised for each mug
+
+-- Defines by how much the caffeine level is raised
+-- for each consumable item
+local caffeine_per_item = {}
+caffeine_per_item["coffee-berries"] = 5
+caffeine_per_item["mug-of-coffee"] = 25
+caffeine_per_item["caffeine"] = 40
+
 local buffed_running_speed_modifier = 0.4 -- Defines by how much the
                                           -- running speed is buffed (additional to 100%)
 local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
@@ -66,15 +72,17 @@ function updateCaffeineLevel(player)
 
         -- Check if the autoinjector needs to be activated
         -- To avoid the display flickering between values, we update just before
-        -- the level sinks below that of one full cup missing
+        -- the level sinks below that of one item of caffeine missing
         if (
             player.gui.left.ppcRoot
             and player.gui.left.ppcRoot.autoInjector
             and player.gui.left.ppcRoot.autoInjector.state
             and game.forces.player.technologies["ppc-auto-consumption"].researched
-            and global.caffeine_level[player.index] < (100 - level_per_mug + decomposition_rate * 2)
+            and global.caffeine_level[player.index] < (
+                100 - caffeine_per_item["caffeine"] + decomposition_rate * 2
+            )
         ) then
-            tryConsume(player)
+            tryConsume(player, true)
         end
 
         updateGUI(player)
@@ -117,9 +125,15 @@ function showGUI(player)
         global.rebuild_gui = false
     end
 
+    if (game.forces.player.technologies["ppc-coffee-production"].researched) then
+        sprite = "item/mug-of-coffee"
+    else
+        sprite = "item/coffee-berries"
+    end
+
     if player.gui.left.ppcRoot == nil then
         player.gui.left.add{type = "frame", name = "ppcRoot", direction = "horizontal"}
-        player.gui.left.ppcRoot.add{type = "sprite-button", name = "drinkButton", sprite = "item/mug-of-coffee"}
+        player.gui.left.ppcRoot.add{type = "sprite-button", name = "drinkButton", sprite = sprite}
         player.gui.left.ppcRoot.add{type = "label", name = "caffeineLevelLabel", caption = "0%"}
 
         player.gui.left.ppcRoot.style.minimal_width = 100
@@ -156,39 +170,64 @@ end
 -- Handles a click event on the GUI button for "drinking"
 function onGUIClick(event)
     local player = game.players[event.player_index]
+
     if (event.element.name == "drinkButton") then
-        tryConsume(player)
+        tryConsume(player, false)
         updateGUI(player)
     end
 end
 script.on_event(defines.events.on_gui_click, onGUIClick)
 
 
----------------------------------------------------------
--- Tries to consume as many mugs as necessary to raise the
--- caffeine level back to 100, where partial multiples
--- count as a full mug. E.g if the level is 85 and every
--- mug gives 20, then it's still two full mugs
-function tryConsume(player)
-    local nrToConsume = math.ceil((100 - global.caffeine_level[player.index]) / level_per_mug)
+-------------------------------------------------------------------------------
+-- Tries to consume as many of the given item as necessary to raise
+-- caffeine level back to 100, where partial multiples count as a full item.
+-- E.g if the level is 75 and every mug gives 20, then it's still two full mugs
+function consume(player, item_name)
+    local nrToConsume = math.ceil(
+        (100 - global.caffeine_level[player.index])
+        / caffeine_per_item[item_name]
+    )
 
-    -- Now check main inv
     local inv = player.get_inventory(defines.inventory.character_main)
-    local count = inv.get_item_count("mug-of-coffee")
+    local count = inv.get_item_count(item_name)
 
     if (count > 0 and nrToConsume > 0) then
         if (count >= nrToConsume) then
-            inv.remove({name = "mug-of-coffee", count = nrToConsume})
+            inv.remove({name = item_name, count = nrToConsume})
             global.caffeine_level[player.index] = 100.0
             nrToConsume = 0
+
         elseif (count > 0) then
-            inv.remove({name = "mug-of-coffee", count = count})
+            inv.remove({name = item_name, count = count})
             nrToConsume = nrToConsume - count
-            global.caffeine_level[player.index] = global.caffeine_level[player.index] + count * level_per_mug
+            global.caffeine_level[player.index] = (
+                global.caffeine_level[player.index]
+                + count * caffeine_per_item[item_name]
+            )
         end
     end
+end
 
-    if (global.caffeine_level[player.index] > 0.0) then
+-------------------------------------------------------------------------------
+-- Tries to consume as many caffeine-giving items as necessary to raise the
+-- caffeine level back to 100, where partial multiples count as a full item.
+-- E.g if the level is 75 and every mug gives 20, then it's still two full mugs
+-- The function tries caffeine first, then mugs of coffee and finally berries
+function tryConsume(player, auto_injector)
+    local old_level = global.caffeine_level[player.index]
+
+    consume(player, "caffeine")
+
+    if (not auto_injector and global.caffeine_level[player.index] < 100.0) then
+        consume(player, "mug-of-coffee")
+    end
+
+    if (not auto_injector and global.caffeine_level[player.index] < 100.0) then
+        consume(player, "coffee-berries")
+    end
+
+    if (global.caffeine_level[player.index] > 0.0 and old_level <= 0.0) then
         addBuff(player)
     end
 end
@@ -198,15 +237,19 @@ end
 function onHotkey(event)
     local player = game.players[event.player_index]
 
-    tryConsume(player)
+    tryConsume(player, false)
     updateGUI(player)
 end
 script.on_event("ppc-consume", onHotkey)
 
 -------------------------------------------------------------------------------
--- Force rebuild the PPC GUI when the auto injector research is finished
+-- Force rebuild the PPC GUI when a research is finished that unlocks a new
+-- item with caffeine
 function onResearchFinished(event)
-    if (event.research.name == "ppc-auto-consumption") then
+    if (
+        event.research.name == "ppc-auto-consumption"
+        or event.research.name == "ppc-coffee-production"
+    ) then
         global.rebuild_gui = true
     end
 end
