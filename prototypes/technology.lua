@@ -162,14 +162,17 @@ data:extend({
   {
       type = "technology",
       name = "ppc-auto-consumption",
-      icon = "__PreciousPreciousCaffeine__/graphics/tech_auto_consumption.png",
+      icon = "__PreciousPreciousCaffeine__/graphics/equipment_auto_injector.png",
       icon_size = 128,
       effects =
       {
-        
+        {
+          type = "unlock-recipe",
+          recipe = "auto-injector"
+        },
       },
       prerequisites = {
-        "ppc-coffee-production",
+        "ppc-caffeine-extraction",
         "chemical-science-pack",
       },
       unit =
@@ -177,9 +180,9 @@ data:extend({
         count = 30,
         ingredients =
         {
-          {"automation-science-pack", 2},
-          {"logistic-science-pack", 2},
-          {"chemical-science-pack", 1},
+          {"automation-science-pack", 1},
+          {"logistic-science-pack", 1},
+          {"chemical-science-pack", 2},
         },
         time = 20
       }

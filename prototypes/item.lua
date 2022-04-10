@@ -154,4 +154,42 @@ data:extend({
     order = "d[cannon-shell]-c[explosive]",
     stack_size = 200
   },
+
+  {
+    type = "item",
+    name = "auto-injector-item",
+    icon = "__PreciousPreciousCaffeine__/graphics/equipment_auto_injector.png",
+    icon_size = 128,
+    icon_mipmaps = 1,
+    flags = {},
+    subgroup = "equipment",
+    stack_size= 1,
+    placed_as_equipment_result = "auto-injector-equipment"
+  },
+
+  {
+    type = "movement-bonus-equipment",
+    name = "auto-injector-equipment",
+    categories = {"armor"},
+    energy_consumption = "50W",
+    movement_bonus = 0,
+    energy_source = {
+      type = "electric",
+      buffer_capacity = "500J",
+      usage_priority = "secondary-input",
+      input_flow_limit = "100W",
+      output_flow_limit = "100W",
+      drain = "50W",
+    },
+    shape = {
+      type = "full",
+      width = 1,
+      height = 1,
+    },
+    sprite = {
+      filename = "__PreciousPreciousCaffeine__/graphics/equipment_auto_injector.png",
+      size = 128,
+    },
+    take_result = "auto-injector-item"
+  },
 })

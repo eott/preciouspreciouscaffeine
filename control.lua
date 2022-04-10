@@ -53,6 +53,24 @@ function removeBuff(player)
     )
 end
 
+function hasAutoInjector(player)
+    local armor_slots = player.get_inventory(defines.inventory.character_armor)
+    for i = 1, #armor_slots do
+
+        local armor = armor_slots[i]
+        if (armor ~= nil and armor.valid_for_read and armor.grid ~= nil and armor.grid.valid) then
+
+            for i, eq in pairs(armor.grid.equipment) do
+                if (eq.name == "auto-injector-equipment") then
+                    return true
+                end
+            end
+        end
+    end
+
+    return false
+end
+
 function updateCaffeineLevel(player)
     initCaffeineLevel(player)
 
@@ -77,7 +95,7 @@ function updateCaffeineLevel(player)
             player.gui.left.ppcRoot
             and player.gui.left.ppcRoot.autoInjector
             and player.gui.left.ppcRoot.autoInjector.state
-            and game.forces.player.technologies["ppc-auto-consumption"].researched
+            and hasAutoInjector(player)
             and global.caffeine_level[player.index] < (
                 100 - caffeine_per_item["caffeine"] + decomposition_rate * 2
             )

@@ -232,4 +232,16 @@ data:extend({
     },
     result = "cryo-shipment"
   },
+
+  {
+    type = "recipe",
+    name = "auto-injector",
+    enabled = "false",
+    ingredients = {
+      {"advanced-circuit", 10},
+      {"plastic-bar", 2},
+      {"steel-plate", 1}
+    },
+    result = "auto-injector-item"
+  },
 })
