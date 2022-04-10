@@ -160,31 +160,65 @@ data:extend({
   },
 
   {
-      type = "technology",
-      name = "ppc-auto-consumption",
-      icon = "__PreciousPreciousCaffeine__/graphics/equipment_auto_injector.png",
-      icon_size = 128,
-      effects =
+    type = "technology",
+    name = "ppc-auto-consumption",
+    icon = "__PreciousPreciousCaffeine__/graphics/equipment_auto_injector.png",
+    icon_size = 128,
+    effects =
+    {
       {
-        {
-          type = "unlock-recipe",
-          recipe = "auto-injector"
-        },
+        type = "unlock-recipe",
+        recipe = "auto-injector"
       },
-      prerequisites = {
-        "ppc-caffeine-extraction",
-        "chemical-science-pack",
-      },
-      unit =
+    },
+    prerequisites = {
+      "ppc-caffeine-extraction",
+      "chemical-science-pack",
+    },
+    unit =
+    {
+      count = 30,
+      ingredients =
       {
-        count = 30,
-        ingredients =
-        {
-          {"automation-science-pack", 1},
-          {"logistic-science-pack", 1},
-          {"chemical-science-pack", 2},
-        },
-        time = 20
-      }
-  }
+        {"automation-science-pack", 1},
+        {"logistic-science-pack", 1},
+        {"chemical-science-pack", 2},
+      },
+      time = 20
+    }
+  },
+
+  {
+    type = "technology",
+    name = "ppc-3a-tech",
+    icon = "__PreciousPreciousCaffeine__/graphics/tech_3a_tech.png",
+    icon_size = 128,
+    effects =
+    {
+      {
+        type = "unlock-recipe",
+        recipe = "3a-tank-shell"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "3a-rocket"
+      },
+    },
+    prerequisites = {
+      "ppc-caffeine-extraction",
+      "explosive-rocketry",
+    },
+    unit =
+    {
+      count = 30,
+      ingredients =
+      {
+        {"automation-science-pack", 1},
+        {"logistic-science-pack", 1},
+        {"chemical-science-pack", 1},
+        {"military-science-pack", 3},
+      },
+      time = 20
+    }
+  },
 })

@@ -116,16 +116,17 @@ data:extend({
     subgroup = "coffee-intermediates",
     stack_size= 1,
     rocket_launch_product = {
-      name = "aaa-tank-shell",
+      name = "3a-tank-shell",
       amount = 30,
     }
   },
 
   {
     type = "ammo",
-    name = "aaa-tank-shell",
-    icon = "__PreciousPreciousCaffeine__/graphics/aaa-tank-shell.png",
-    icon_size = 32,
+    name = "3a-tank-shell",
+    icon = "__PreciousPreciousCaffeine__/graphics/icon_3a_tank_shell.png",
+    icon_size = 64,
+    icon_mipmaps = 4,
     flags = {},
     ammo_type =
     {
@@ -137,7 +138,7 @@ data:extend({
         action_delivery =
         {
           type = "projectile",
-          projectile = "aaa-tank-shell-flying",
+          projectile = "3a-tank-shell-flying",
           starting_speed = 1,
           direction_deviation = 0.1,
           range_deviation = 0.1,
@@ -151,7 +152,42 @@ data:extend({
       },
     },
     subgroup = "ammo",
-    order = "d[cannon-shell]-c[explosive]",
+    order = "d[cannon-shell]-c[caffeine]",
+    stack_size = 200
+  },
+
+  {
+    type = "ammo",
+    name = "3a-rocket",
+    icon = "__PreciousPreciousCaffeine__/graphics/icon_3a_rocket.png",
+    icon_size = 64,
+    icon_mipmaps = 4,
+    flags = {},
+    ammo_type =
+    {
+      category = "rocket",
+      target_type = "direction",
+      action =
+      {
+        type = "direct",
+        action_delivery =
+        {
+          type = "projectile",
+          projectile = "3a-rocket-flying",
+          starting_speed = 0.25,
+          direction_deviation = 0.1,
+          range_deviation = 0.1,
+          max_range = 50,
+          source_effects =
+          {
+            type = "create-explosion",
+            entity_name = "explosion-gunshot"
+          },
+        }
+      },
+    },
+    subgroup = "ammo",
+    order = "d[rocket]-c[caffeine]",
     stack_size = 200
   },
 

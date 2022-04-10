@@ -244,4 +244,32 @@ data:extend({
     },
     result = "auto-injector-item"
   },
+
+  {
+    type = "recipe",
+    name = "3a-tank-shell",
+    enabled = "false",
+    energy_required = 8,
+    ingredients = {
+      {"explosives", 2},
+      {"caffeine", 20},
+      {"plastic-bar", 1},
+      {"iron-plate", 2}
+    },
+    result = "3a-tank-shell"
+  },
+
+  {
+    type = "recipe",
+    name = "3a-rocket",
+    enabled = "false",
+    energy_required = 8,
+    ingredients = {
+      {"explosives", 2},
+      {"caffeine", 20},
+      {"plastic-bar", 1},
+      {"iron-plate", 2}
+    },
+    result = "3a-rocket"
+  },
 })
