@@ -141,4 +141,41 @@ data:extend({
     },
     action_cooldown = 30
   },
+
+  {
+    type = "projectile",
+    name = "caffeine-shotgun-pellet",
+    flags = {"not-on-map"},
+    collision_box = {{-0.05, -0.25}, {0.05, 0.25}},
+    acceleration = 0,
+    direction_only = true,
+    action =
+    {
+      type = "direct",
+      action_delivery =
+      {
+        type = "instant",
+        target_effects =
+        {
+          {
+            type = "damage",
+            damage = {amount = 2, type = "physical"}
+          },
+          {
+            type = "damage",
+            damage = {amount = 4, type = "poison"}
+          }
+        }
+      }
+    },
+    animation =
+    {
+      filename = "__base__/graphics/entity/bullet/bullet.png",
+      draw_as_glow = true,
+      frame_count = 1,
+      width = 3,
+      height = 50,
+      priority = "high"
+    }
+  },
 })

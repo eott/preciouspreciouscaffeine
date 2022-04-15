@@ -272,4 +272,30 @@ data:extend({
     },
     result = "3a-rocket"
   },
+
+  {
+    type = "recipe",
+    name = "caffeine-rounds-magazine",
+    enabled = "false",
+    energy_required = 4,
+    ingredients = {
+      {"copper-plate", 2},
+      {"caffeine", 3},
+      {"steel-plate", 1}
+    },
+    result = "caffeine-rounds-magazine"
+  },
+
+  {
+    type = "recipe",
+    name = "caffeine-shotgun-shell",
+    enabled = "false",
+    energy_required = 4,
+    ingredients = {
+      {"copper-plate", 2},
+      {"caffeine", 3},
+      {"iron-plate", 2}
+    },
+    result = "caffeine-shotgun-shell"
+  },
 })

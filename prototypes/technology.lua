@@ -221,4 +221,38 @@ data:extend({
       time = 20
     }
   },
+
+  {
+    type = "technology",
+    name = "ppc-caffeine-ammo",
+    icon = "__PreciousPreciousCaffeine__/graphics/tech_caffeine_ammo.png",
+    icon_size = 128,
+    effects =
+    {
+      {
+        type = "unlock-recipe",
+        recipe = "caffeine-rounds-magazine"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "caffeine-shotgun-shell"
+      },
+    },
+    prerequisites = {
+      "ppc-caffeine-extraction",
+      "military-science-pack",
+      "military-2",
+    },
+    unit =
+    {
+      count = 25,
+      ingredients =
+      {
+        {"automation-science-pack", 1},
+        {"chemical-science-pack", 1},
+        {"military-science-pack", 4},
+      },
+      time = 30
+    }
+  },
 })
