@@ -3,9 +3,10 @@ data:extend({
     type = "assembling-machine",
     name = "coffee-plantation",
     icon = "__PreciousPreciousCaffeine__/graphics/icon_coffee_plantation.png",
-    icon_size = 32,
+    icon_size = 128,
+    icon_mipmaps = 4,
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
-    minable = {mining_time = 1, result = "coffee-plantation"},
+    minable = {mining_time = 0.5, result = "coffee-plantation"},
     crafting_categories = {"plantation"},
     crafting_speed = 1,
     max_health = 150,
@@ -27,10 +28,11 @@ data:extend({
     animation = {
       layers = {
         {
-          filename = "__PreciousPreciousCaffeine__/graphics/coffee_plantation.png",
+          filename = "__PreciousPreciousCaffeine__/graphics/entity_coffee_plantation.png",
           priority = "high",
-          width = 208,
-          height = 115,
+          width = 463,
+          height = 256,
+          scale = 0.44921875,
           frame_count = 1,
           line_length = 1,
           shift = {1.35, 0.0},
