@@ -124,9 +124,20 @@ data:extend({
     subgroup = "coffee-intermediates",
     stack_size= 1,
     rocket_launch_product = {
-      name = "3a-tank-shell",
-      amount = 30,
+      name = "star-buck",
+      amount = 1000,
     }
+  },
+
+  {
+    type = "item",
+    name = "star-buck",
+    icon = "__PreciousPreciousCaffeine__/graphics/icon_star_buck.png",
+    icon_size = 128,
+    icon_mipmaps = 4,
+    flags = {},
+    subgroup = "coffee-intermediates",
+    stack_size= 1000,
   },
 
   {

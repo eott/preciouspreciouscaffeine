@@ -141,7 +141,7 @@ data:extend({
       }
     },
     prerequisites = {
-      "rocket-silo",
+      "space-science-pack",
       "ppc-coffee-production",
     },
     unit =

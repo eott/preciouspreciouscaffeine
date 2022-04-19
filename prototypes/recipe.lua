@@ -211,7 +211,7 @@ data:extend({
     enabled = "false",
     ingredients = 
     {
-      {"coffee-powder",20},
+      {"roasted-coffee-beans",400},
       {"wood",6}
     },
     result = "coffee-crate"
