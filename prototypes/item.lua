@@ -117,8 +117,9 @@ data:extend({
   {
     type = "item",
     name = "cryo-shipment",
-    icon = "__PreciousPreciousCaffeine__/graphics/cryo-shipment.png",
-    icon_size = 32,
+    icon = "__PreciousPreciousCaffeine__/graphics/icon_cryo_shipment.png",
+    icon_size = 128,
+    icon_mipmaps = 4,
     flags = {},
     subgroup = "coffee-intermediates",
     stack_size= 1,
