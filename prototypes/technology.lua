@@ -1,42 +1,75 @@
 data:extend({
   {
-      type = "technology",
-      name = "ppc-coffee-plantations",
-      icon = "__PreciousPreciousCaffeine__/graphics/tech_coffee_plantations.png",
-      icon_size = 128,
-      effects =
+    type = "technology",
+    name = "ppc-coffee-plantations",
+    icon = "__PreciousPreciousCaffeine__/graphics/tech_coffee_plantations.png",
+    icon_size = 128,
+    effects =
+    {
       {
-        {
-            type = "unlock-recipe",
-            recipe = "coffee-plantation"
-        },
-        {
-            type = "unlock-recipe",
-            recipe = "coffee-berries"
-        },
-        {
-            type = "unlock-recipe",
-            recipe = "wood-growth"
-        },
-        {
-            type = "unlock-recipe",
-            recipe = "bio-mass-from-berries"
-        },
-        {
-            type = "unlock-recipe",
-            recipe = "bio-mass-from-wood"
-        },
+        type = "unlock-recipe",
+        recipe = "coffee-plantation"
       },
-      prerequisites = {},
-      unit =
       {
-        count = 10,
-        ingredients =
-        {
-          {"automation-science-pack", 1},
-        },
-        time = 20
-      }
+        type = "unlock-recipe",
+        recipe = "coffee-berries"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "wood-growth"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "bio-mass-from-berries"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "bio-mass-from-wood"
+      },
+    },
+    prerequisites = {},
+    unit =
+    {
+      count = 10,
+      ingredients =
+      {
+        {"automation-science-pack", 1},
+      },
+      time = 20
+    }
+  },
+
+  {
+    type = "technology",
+    name = "ppc-improved-fertilizer",
+    icon = "__PreciousPreciousCaffeine__/graphics/tech_improved_fertilizer.png",
+    icon_size = 128,
+    effects =
+    {
+      {
+        type = "unlock-recipe",
+        recipe = "wood-growth-2"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "bio-mass-from-mixed"
+      },
+    },
+    prerequisites = {
+      "ppc-coffee-plantations",
+      "chemical-science-pack",
+    },
+    unit =
+    {
+      count = 30,
+      ingredients =
+      {
+        {"automation-science-pack", 2},
+        {"logistics-science-pack", 1},
+        {"chemical-science-pack", 2},
+      },
+      time = 15
+    }
   },
 
   {

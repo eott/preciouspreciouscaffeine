@@ -50,6 +50,20 @@ data:extend({
 
   {
     type = "recipe",
+    name = "wood-growth-2",
+    enabled = "false",
+    category = "plantation",
+    ingredients = {
+      {"bio-mass", 4},
+    },
+    result = "wood",
+    energy_required = 20,
+    result_count = 4,
+    always_show_made_in = true,
+  },
+
+  {
+    type = "recipe",
     name = "coffee-beans",
     enabled = "false",
     ingredients = 
@@ -81,6 +95,22 @@ data:extend({
       {"wood", 1}
     },
     result = "bio-mass"
+  },
+
+  {
+    type = "recipe",
+    name = "bio-mass-from-mixed",
+    enabled = "false",
+    energy_required = 4,
+    ingredients = 
+    {
+      {"bio-mass", 1},
+      {"wood", 1},
+      {"coffee-berries", 4},
+    },
+    results = {
+      {type="item", name="bio-mass", amount=3}
+    },
   },
 
   {
