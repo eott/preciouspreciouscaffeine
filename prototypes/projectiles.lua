@@ -108,9 +108,9 @@ data:extend({
     slow_down_factor = 0,
     affected_by_wind = false,
     cyclic = true,
-    duration = 60 * 10,
+    duration = 60 * 20,
     fade_away_duration = 2 * 60,
-    spread_duration = 10,
+    spread_duration = 20,
     color = { r = 1.0, g = 1.0, b = 1.0 },
     action =
     {
@@ -132,7 +132,7 @@ data:extend({
               target_effects =
               {
                 type = "damage",
-                damage = { amount = 120, type = "poison"}
+                damage = { amount = 60, type = "poison"}
               }
             }
           }
