@@ -10,6 +10,7 @@ data:extend({
     type = "recipe",
     name = "coffee-plantation",
     enabled = "false",
+    energy_required = 5,
     ingredients = 
     {
       {"iron-stick",10},
@@ -131,6 +132,7 @@ data:extend({
     type = "recipe",
     name = "coffee-powder",
     enabled = "false",
+    energy_required = 1,
     ingredients = 
     {
       {"roasted-coffee-beans",20}
@@ -233,6 +235,7 @@ data:extend({
     type = "recipe",
     name = "coffee-crate",
     enabled = "false",
+    energy_required = 2,
     ingredients = 
     {
       {"roasted-coffee-beans",400},
@@ -244,6 +247,7 @@ data:extend({
   {
     type = "recipe",
     name = "cryo-shipment",
+    energy_required = 10,
     enabled = "false",
     ingredients = 
     {
@@ -261,6 +265,7 @@ data:extend({
     type = "recipe",
     name = "auto-injector",
     enabled = "false",
+    energy_required = 5,
     ingredients = {
       {"advanced-circuit", 10},
       {"plastic-bar", 2},
