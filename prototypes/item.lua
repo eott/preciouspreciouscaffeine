@@ -342,4 +342,15 @@ data:extend({
     order = "b[shotgun]-b[caffeine]",
     stack_size = 200
   },
+
+  {
+    type = "item",
+    name = "golden-bean",
+    icon = "__PreciousPreciousCaffeine__/graphics/icon_golden_bean.png",
+    icon_size = 64,
+    flags = {},
+    subgroup = "military-equipment",
+    place_result="golden-bean",
+    stack_size= 5,
+  },
 })

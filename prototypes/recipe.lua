@@ -328,4 +328,15 @@ data:extend({
     },
     result = "caffeine-shotgun-shell"
   },
+
+  {
+    type = "recipe",
+    name = "golden-bean",
+    enabled = "false",
+    energy_required = 1,
+    ingredients = {
+      {"star-buck", 25000}
+    },
+    result = "golden-bean",
+  },
 })

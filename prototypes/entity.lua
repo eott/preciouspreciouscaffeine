@@ -41,4 +41,34 @@ data:extend({
       },
     },
   },
+
+  {
+    type = "simple-entity-with-owner",
+    name = "golden-bean",
+    icon = "__PreciousPreciousCaffeine__/graphics/icon_golden_bean.png",
+    icon_size = 64,
+    icon_mipmaps = 1,
+    flags = {"placeable-neutral", "placeable-player", "player-creation"},
+    minable = {mining_time = 0.5, result = "golden-bean"},
+    max_health = 1000,
+    corpse = "small-remnants",
+    collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
+    selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+    render_layer = "object",
+    animations = {
+      layers = {
+        {
+          filename = "__PreciousPreciousCaffeine__/graphics/entity_golden_bean.png",
+          priority = "high",
+          width = 64,
+          height = 115,
+          scale = 1.0,
+          frame_count = 1,
+          line_length = 1,
+          shift = {0.0, -0.5},
+          animation_speed = 0.1,
+        },
+      },
+    },
+  },
 })

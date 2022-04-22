@@ -171,7 +171,11 @@ data:extend({
       {
           type = "unlock-recipe",
           recipe = "cryo-shipment"
-      }
+      },
+      {
+          type = "unlock-recipe",
+          recipe = "golden-bean"
+      },
     },
     prerequisites = {
       "space-science-pack",
