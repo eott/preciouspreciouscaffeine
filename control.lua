@@ -1,5 +1,6 @@
----------------------------------------------------------
--- Constants, local to the scope
+-------------------------------------------------------------------------------
+-- Control logic for the workings of the coffee and caffeine items
+
 local decomposition_rate = 0.0625  -- Defines how quickly the caffeine
                                    -- level decreases (per tick)
 local decomposition_timespan = 5 -- Defines how often (in ticks)
@@ -17,11 +18,12 @@ local buffed_running_speed_modifier = 0.4 -- Defines by how much the
 local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
                                            -- speed is buffed (additional to 100%)
 
--- Variables, global to the global table provided by factorio for each mod
+-- Entries in the global table, which is available outside the local scope and,
+-- which is most important, is serialized in the save data
 global.caffeine_level = {} -- Holds the current caffeine level
 global.rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
----------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Is called in each tick and handles the caffeine level update
 function onTick()
     for i, player in pairs(game.players) do
@@ -31,6 +33,8 @@ function onTick()
     end
 end
 
+-------------------------------------------------------------------------------
+-- Adds the speed buff to the given player
 function addBuff(player)
     player.character_crafting_speed_modifier = (
         player.character_crafting_speed_modifier
@@ -42,6 +46,8 @@ function addBuff(player)
     )
 end
 
+-------------------------------------------------------------------------------
+-- Removes the speed buff from the given player
 function removeBuff(player)
     player.character_crafting_speed_modifier = (
         player.character_crafting_speed_modifier
@@ -53,6 +59,9 @@ function removeBuff(player)
     )
 end
 
+-------------------------------------------------------------------------------
+-- Checks if the given player has an auto injector equipment in any of their
+-- equipped armors
 function hasAutoInjector(player)
     local armor_slots = player.get_inventory(defines.inventory.character_armor)
     for i = 1, #armor_slots do
@@ -71,6 +80,9 @@ function hasAutoInjector(player)
     return false
 end
 
+-------------------------------------------------------------------------------
+-- Update the caffeine level for the given player, check if the auto injector
+-- needs to be activated and do so if that is the case
 function updateCaffeineLevel(player)
     initCaffeineLevel(player)
 
@@ -83,6 +95,8 @@ function updateCaffeineLevel(player)
         )
         local new_level = global.caffeine_level[player.index]
 
+        -- When the level falls below zero (but was positive before), remove
+        -- the buff and clamp the level to zero
         if (old_level > 0.0 and new_level <= 0.0) then
             global.caffeine_level[player.index] = 0.0
             removeBuff(player)
@@ -104,6 +118,10 @@ function updateCaffeineLevel(player)
     end
 end
 
+-------------------------------------------------------------------------------
+-- Initialize the caffeine level for the given player as zero and add the buff
+-- to them. This is necessary because otherwise the buff would be removed in
+-- the first tick, but none was added yet, hence a debuff occurs.
 function initCaffeineLevel(player)
     if (global.caffeine_level[player.index] == nil) then
         global.caffeine_level[player.index] = 0
@@ -111,10 +129,9 @@ function initCaffeineLevel(player)
     end
 end
 
----------------------------------------------------------
--- Initialize global collections (used for the onTick method)
--- and register the onTick handler for the first time (has to
--- be done on every load afterwards)
+-------------------------------------------------------------------------------
+-- Initialize global collections (used for the onTick method) and register the
+-- onTick handler for the first time (has to be done on every load afterwards)
 function onInit()
     for i, player in pairs(game.players) do
         initCaffeineLevel(player)
@@ -124,16 +141,17 @@ function onInit()
 end
 script.on_init(onInit)
 
----------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Register the onTick handler with the tick game event
 function onLoad()
     script.on_event(defines.events.on_tick, onTick)
 end
 script.on_load(onLoad)
 
----------------------------------------------------------
--- Shows the GUI for the caffeine level, if it does not
--- exist already
+-------------------------------------------------------------------------------
+-- Shows the GUI for the caffeine level, if it does not exist already. If the
+-- global table entry rebuild_gui is set, destroys and rebuilds the GUI. This
+-- is necessary because some research changes the icon for the button
 function showGUI(player)
     if global.rebuild_gui and player.gui.left.ppcRoot ~= nil then
         player.gui.left.ppcRoot.destroy()
@@ -161,8 +179,8 @@ function showGUI(player)
     end
 end
 
----------------------------------------------------------
--- Updates the GUI for the caffeine level
+-------------------------------------------------------------------------------
+-- Updates the GUI for the caffeine level of the given player
 function updateGUI(player)
     showGUI(player)
     if player.gui.left.ppcRoot ~= nil then
@@ -170,7 +188,7 @@ function updateGUI(player)
     end
 end
 
----------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Handles a click event on the GUI button for "drinking"
 function onGUIClick(event)
     local player = game.players[event.player_index]
@@ -184,7 +202,7 @@ script.on_event(defines.events.on_gui_click, onGUIClick)
 
 
 -------------------------------------------------------------------------------
--- Tries to consume as many of the given item as necessary to raise
+-- Tries to consume as many of the given item as necessary to raise the
 -- caffeine level back to 100, where partial multiples count as a full item.
 -- E.g if the level is 75 and every mug gives 20, then it's still two full mugs
 function consume(player, item_name)
@@ -236,7 +254,7 @@ function tryConsume(player, auto_injector)
     end
 end
 
----------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Handles the custom hotkey for consuming coffee
 function onHotkey(event)
     local player = game.players[event.player_index]
