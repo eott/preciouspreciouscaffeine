@@ -92,10 +92,7 @@ function updateCaffeineLevel(player)
         -- To avoid the display flickering between values, we update just before
         -- the level sinks below that of one item of caffeine missing
         if (
-            player.gui.left.ppcRoot
-            and player.gui.left.ppcRoot.autoInjector
-            and player.gui.left.ppcRoot.autoInjector.state
-            and hasAutoInjector(player)
+            hasAutoInjector(player)
             and global.caffeine_level[player.index] < (
                 100 - caffeine_per_item["caffeine"] + decomposition_rate * 2
             )
@@ -161,17 +158,6 @@ function showGUI(player)
 
         player.gui.left.ppcRoot.caffeineLevelLabel.style.top_padding = 5
         player.gui.left.ppcRoot.caffeineLevelLabel.style.minimal_width = 35
-    end
-
-    if (
-        game.forces.player.technologies["ppc-auto-consumption"].researched
-        and player.gui.left.ppcRoot.autoInjector == nil
-    ) then
-        player.gui.left.ppcRoot.add{type = "label", name = "autoInjectorLabel", caption = "Auto"}
-        player.gui.left.ppcRoot.add{type = "checkbox", name = "autoInjector", state = false}
-        player.gui.left.ppcRoot.autoInjectorLabel.style.top_padding = 5
-        player.gui.left.ppcRoot.autoInjector.style.top_padding = 10
-        player.gui.left.ppcRoot.style.minimal_width = 160
     end
 end
 
