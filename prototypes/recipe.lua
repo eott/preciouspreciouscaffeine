@@ -308,7 +308,7 @@ data:extend({
     enabled = "false",
     energy_required = 4,
     ingredients = {
-      {"copper-plate", 2},
+      {"copper-plate", 5},
       {"caffeine", 3},
       {"steel-plate", 1}
     },
