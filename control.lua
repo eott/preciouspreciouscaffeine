@@ -49,14 +49,30 @@ end
 -------------------------------------------------------------------------------
 -- Removes the speed buff from the given player
 function removeBuff(player)
-    player.character_crafting_speed_modifier = (
-        player.character_crafting_speed_modifier
-        - buffed_crafting_speed_modifier
-    )
-    player.character_running_speed_modifier = (
-        player.character_running_speed_modifier
-        - buffed_running_speed_modifier
-    )
+    if game.active_mods['death_curses'] then
+        -- the Death Curses mod sets the reduced and restored modifiers to fixed
+        -- values, thus we can max it with -1 here without having an accumu-
+        -- lating effect due to the difference in adding and subtracting
+        player.character_crafting_speed_modifier = math.max(
+            -1.0,
+            player.character_crafting_speed_modifier
+            - buffed_crafting_speed_modifier
+        )
+        player.character_running_speed_modifier = math.max(
+            -1.0,
+            player.character_running_speed_modifier
+            - buffed_running_speed_modifier
+        )
+    else
+        player.character_crafting_speed_modifier = (
+            player.character_crafting_speed_modifier
+            - buffed_crafting_speed_modifier
+        )
+        player.character_running_speed_modifier = (
+            player.character_running_speed_modifier
+            - buffed_running_speed_modifier
+        )
+    end
 end
 
 -------------------------------------------------------------------------------

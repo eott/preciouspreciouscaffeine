@@ -1,6 +1,6 @@
 {
   "name": "PreciousPreciousCaffeine",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "factorio_version": "1.1",
   "dependencies": ["base >= 1.1"],
   "title": "Precious, precious caffeine",
