@@ -247,7 +247,7 @@ data:extend({
     ingredients = 
     {
       {type="item", name="coffee-crate", amount=50},
-      {type="item", name="fusion-reactor-equipment", amount=1},
+      {type="item", name="fission-reactor-equipment", amount=1},
       {type="item", name="battery", amount=100},
       {type="item", name="advanced-circuit", amount=100},
       {type="item", name="plastic-bar", amount=200},
