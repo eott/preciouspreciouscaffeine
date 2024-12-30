@@ -148,6 +148,7 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     flags = {},
+    ammo_category = "bullet",
     ammo_type =
     {
       category = "cannon-shell",
@@ -183,6 +184,7 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     flags = {},
+    ammo_category = "bullet",
     ammo_type =
     {
       category = "rocket",
@@ -255,6 +257,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_caffeine_magazine.png",
     icon_size = 64,
     icon_mipmaps = 4,
+    ammo_category = "bullet",
     ammo_type =
     {
       category = "bullet",
@@ -301,6 +304,7 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_caffeine_shotgun_shell.png",
     icon_size = 64,
     icon_mipmaps = 4,
+    ammo_category = "bullet",
     ammo_type =
     {
       category = "shotgun-shell",
