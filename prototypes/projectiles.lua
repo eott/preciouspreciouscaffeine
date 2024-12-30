@@ -22,12 +22,11 @@ data:extend({
     animation =
     {
       filename = "__base__/graphics/entity/bullet/bullet.png",
-      frame_count = 1,
+      draw_as_glow = true,
       width = 3,
       height = 50,
       priority = "high"
     },
-    smoke = capsule_smoke,
   },
 
   {
@@ -51,41 +50,9 @@ data:extend({
         }
       }
     },
-    --light = {intensity = 0.5, size = 4},
-    animation =
-    {
-      filename = "__base__/graphics/entity/rocket/rocket.png",
-      draw_as_glow = true,
-      frame_count = 8,
-      line_length = 8,
-      width = 9,
-      height = 35,
-      shift = {0, 0},
-      priority = "high"
-    },
-    shadow =
-    {
-      filename = "__base__/graphics/entity/rocket/rocket-shadow.png",
-      frame_count = 1,
-      width = 7,
-      height = 24,
-      priority = "high",
-      shift = {0, 0}
-    },
-    smoke =
-    {
-      {
-        name = "smoke-fast",
-        deviation = {0.15, 0.15},
-        frequency = 1,
-        position = {0, 1},
-        slow_down_factor = 1,
-        starting_frame = 3,
-        starting_frame_deviation = 5,
-        starting_frame_speed = 0,
-        starting_frame_speed_deviation = 5
-      }
-    }
+    animation = require("__base__.prototypes.entity.rocket-projectile-pictures").animation({1, 0.8, 0.3}),
+    shadow = require("__base__.prototypes.entity.rocket-projectile-pictures").shadow,
+    smoke = require("__base__.prototypes.entity.rocket-projectile-pictures").smoke,
   },
 
   {
@@ -96,7 +63,7 @@ data:extend({
     animation =
     {
       filename = "__base__/graphics/entity/cloud/cloud-45-frames.png",
-      flags = { "compressed" },
+      flags = {},
       priority = "low",
       width = 256,
       height = 256,
