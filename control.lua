@@ -80,6 +80,10 @@ end
 -- equipped armors
 function hasAutoInjector(player)
     local armor_slots = player.get_inventory(defines.inventory.character_armor)
+    if (armor_slots == nil) then
+        return false
+    end
+
     for i = 1, #armor_slots do
 
         local armor = armor_slots[i]
