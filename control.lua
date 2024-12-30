@@ -18,10 +18,10 @@ local buffed_running_speed_modifier = 0.4 -- Defines by how much the
 local buffed_crafting_speed_modifier = 0.8 -- Defines by how much the crafting
                                            -- speed is buffed (additional to 100%)
 
--- Entries in the global table, which is available outside the local scope and,
+-- Entries in the storage table, which is available outside the local scope and,
 -- which is most important, is serialized in the save data
-global.caffeine_level = {} -- Holds the current caffeine level
-global.rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
+storage.caffeine_level = {} -- Holds the current caffeine level
+storage.rebuild_gui = false -- Holds the status if the gui needs rebuilding (usually after a load)
 
 -------------------------------------------------------------------------------
 -- Is called in each tick and handles the caffeine level update
@@ -104,17 +104,17 @@ function updateCaffeineLevel(player)
 
     -- Update caffeine level, but only every decomposition_timespan ticks
     if (game.tick % decomposition_timespan == 0) then
-        local old_level = global.caffeine_level[player.index]
-        global.caffeine_level[player.index] = math.max(0,
-            global.caffeine_level[player.index]
+        local old_level = storage.caffeine_level[player.index]
+        storage.caffeine_level[player.index] = math.max(0,
+            storage.caffeine_level[player.index]
             - decomposition_rate * decomposition_timespan
         )
-        local new_level = global.caffeine_level[player.index]
+        local new_level = storage.caffeine_level[player.index]
 
         -- When the level falls below zero (but was positive before), remove
         -- the buff and clamp the level to zero
         if (old_level > 0.0 and new_level <= 0.0) then
-            global.caffeine_level[player.index] = 0.0
+            storage.caffeine_level[player.index] = 0.0
             removeBuff(player)
         end
 
@@ -123,7 +123,7 @@ function updateCaffeineLevel(player)
         -- the level sinks below that of one item of caffeine missing
         if (
             hasAutoInjector(player)
-            and global.caffeine_level[player.index] < (
+            and storage.caffeine_level[player.index] < (
                 100 - caffeine_per_item["caffeine"] + decomposition_rate * 2
             )
         ) then
@@ -139,8 +139,8 @@ end
 -- to them. This is necessary because otherwise the buff would be removed in
 -- the first tick, but none was added yet, hence a debuff occurs.
 function initCaffeineLevel(player)
-    if (global.caffeine_level[player.index] == nil) then
-        global.caffeine_level[player.index] = 0
+    if (storage.caffeine_level[player.index] == nil) then
+        storage.caffeine_level[player.index] = 0
         addBuff(player)
     end
 end
@@ -166,12 +166,12 @@ script.on_load(onLoad)
 
 -------------------------------------------------------------------------------
 -- Shows the GUI for the caffeine level, if it does not exist already. If the
--- global table entry rebuild_gui is set, destroys and rebuilds the GUI. This
+-- storage table entry rebuild_gui is set, destroys and rebuilds the GUI. This
 -- is necessary because some research changes the icon for the button
 function showGUI(player)
-    if global.rebuild_gui and player.gui.left.ppcRoot ~= nil then
+    if storage.rebuild_gui and player.gui.left.ppcRoot ~= nil then
         player.gui.left.ppcRoot.destroy()
-        global.rebuild_gui = false
+        storage.rebuild_gui = false
     end
 
     if (game.forces.player.technologies["ppc-coffee-production"].researched) then
@@ -200,7 +200,7 @@ end
 function updateGUI(player)
     showGUI(player)
     if player.gui.left.ppcRoot ~= nil then
-        player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(global.caffeine_level[player.index]), "%")
+        player.gui.left.ppcRoot.caffeineLevelLabel.caption = string.format("%d %s",  math.ceil(storage.caffeine_level[player.index]), "%")
     end
 end
 
@@ -223,7 +223,7 @@ script.on_event(defines.events.on_gui_click, onGUIClick)
 -- E.g if the level is 75 and every mug gives 20, then it's still two full mugs
 function consume(player, item_name)
     local nrToConsume = math.ceil(
-        (100 - global.caffeine_level[player.index])
+        (100 - storage.caffeine_level[player.index])
         / caffeine_per_item[item_name]
     )
 
@@ -233,14 +233,14 @@ function consume(player, item_name)
     if (count > 0 and nrToConsume > 0) then
         if (count >= nrToConsume) then
             inv.remove({name = item_name, count = nrToConsume})
-            global.caffeine_level[player.index] = 100.0
+            storage.caffeine_level[player.index] = 100.0
             nrToConsume = 0
 
         elseif (count > 0) then
             inv.remove({name = item_name, count = count})
             nrToConsume = nrToConsume - count
-            global.caffeine_level[player.index] = (
-                global.caffeine_level[player.index]
+            storage.caffeine_level[player.index] = (
+                storage.caffeine_level[player.index]
                 + count * caffeine_per_item[item_name]
             )
         end
@@ -253,19 +253,19 @@ end
 -- E.g if the level is 75 and every mug gives 20, then it's still two full mugs
 -- The function tries caffeine first, then mugs of coffee and finally berries
 function tryConsume(player, auto_injector)
-    local old_level = global.caffeine_level[player.index]
+    local old_level = storage.caffeine_level[player.index]
 
     consume(player, "caffeine")
 
-    if (not auto_injector and global.caffeine_level[player.index] < 100.0) then
+    if (not auto_injector and storage.caffeine_level[player.index] < 100.0) then
         consume(player, "mug-of-coffee")
     end
 
-    if (not auto_injector and global.caffeine_level[player.index] < 100.0) then
+    if (not auto_injector and storage.caffeine_level[player.index] < 100.0) then
         consume(player, "coffee-berries")
     end
 
-    if (global.caffeine_level[player.index] > 0.0 and old_level <= 0.0) then
+    if (storage.caffeine_level[player.index] > 0.0 and old_level <= 0.0) then
         addBuff(player)
     end
 end
@@ -288,7 +288,7 @@ function onResearchFinished(event)
         event.research.name == "ppc-auto-consumption"
         or event.research.name == "ppc-coffee-production"
     ) then
-        global.rebuild_gui = true
+        storage.rebuild_gui = true
     end
 end
 script.on_event(defines.events.on_research_finished, onResearchFinished)
