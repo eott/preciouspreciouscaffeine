@@ -25,18 +25,20 @@ data:extend({
     module_specification = {
       module_slots = 0
     },
-    animation = {
-      layers = {
-        {
-          filename = "__PreciousPreciousCaffeine__/graphics/entity_coffee_plantation.png",
-          priority = "high",
-          width = 463,
-          height = 256,
-          scale = 0.44921875,
-          frame_count = 1,
-          line_length = 1,
-          shift = {1.35, 0.0},
-          animation_speed = 0.1,
+    graphics_set = {
+      animation = {
+        layers = {
+          {
+            filename = "__PreciousPreciousCaffeine__/graphics/entity_coffee_plantation.png",
+            priority = "high",
+            width = 463,
+            height = 256,
+            scale = 0.44921875,
+            frame_count = 1,
+            line_length = 1,
+            shift = {1.35, 0.0},
+            animation_speed = 0.1,
+          },
         },
       },
     },
@@ -55,18 +57,20 @@ data:extend({
     collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
     selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
     render_layer = "object",
-    animations = {
-      layers = {
-        {
-          filename = "__PreciousPreciousCaffeine__/graphics/entity_golden_bean.png",
-          priority = "high",
-          width = 64,
-          height = 115,
-          scale = 1.0,
-          frame_count = 1,
-          line_length = 1,
-          shift = {0.0, -0.5},
-          animation_speed = 0.1,
+    graphics_set = {
+      animations = {
+        layers = {
+          {
+            filename = "__PreciousPreciousCaffeine__/graphics/entity_golden_bean.png",
+            priority = "high",
+            width = 64,
+            height = 115,
+            scale = 1.0,
+            frame_count = 1,
+            line_length = 1,
+            shift = {0.0, -0.5},
+            animation_speed = 0.1,
+          },
         },
       },
     },
