@@ -18,7 +18,8 @@ data:extend({
       {type="item", name="wood", amount=50},
       {type="item", name="inserter", amount=2}
     },
-    results = {{type="item", name="coffee-plantation", amount=1}}
+    results = {{type="item", name="coffee-plantation", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -32,6 +33,7 @@ data:extend({
     results = {{type="item", name="coffee-berries", amount=10}},
     energy_required = 20,
     always_show_made_in = true,
+    allow_productivity = false,
   },
 
   {
@@ -45,6 +47,7 @@ data:extend({
     results = {{type="item", name="wood", amount=1}},
     energy_required = 20,
     always_show_made_in = true,
+    allow_productivity = false,
   },
 
   {
@@ -58,6 +61,7 @@ data:extend({
     results = {{type="item", name="wood", amount=4}},
     energy_required = 20,
     always_show_made_in = true,
+    allow_productivity = false,
   },
 
   {
@@ -69,6 +73,7 @@ data:extend({
       {type="item", name="coffee-berries", amount=1}
     },
     results = {{type="item", name="coffee-beans", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -81,6 +86,7 @@ data:extend({
       {type="item", name="coffee-berries", amount=8}
     },
     results = {{type="item", name="bio-mass", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -93,6 +99,7 @@ data:extend({
       {type="item", name="wood", amount=1}
     },
     results = {{type="item", name="bio-mass", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -109,6 +116,7 @@ data:extend({
     results = {
       {type="item", name="bio-mass", amount=3}
     },
+    allow_productivity = false,
   },
 
   {
@@ -117,11 +125,12 @@ data:extend({
     enabled = false,
     category = "smelting",
     energy_required = 3.5,
-    ingredients = 
-    {
-      {type="item", name="coffee-beans", amount=5}
-    },
-    results = {{type="item", name="roasted-coffee-beans", amount=5}},
+    ingredients = {{type="item", name="coffee-beans", amount=5}},
+    results = {{type="item", name="roasted-coffee-beans", amount=5, ignored_by_productivity=100}},
+    allow_productivity = true, -- should be false to match the other steps in the production chain,
+                               -- but due to a bug the flag is ignored anyway. we could also add
+                               -- ignored_by_productivity=100 to the results, but the progress bar
+                               -- would still show, which is confusing
   },
 
   {
@@ -134,6 +143,7 @@ data:extend({
       {type="item", name="roasted-coffee-beans", amount=20}
     },
     results = {{type="item", name="coffee-powder", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -149,6 +159,7 @@ data:extend({
     results = {
       {type="fluid", name="fluid-coffee", amount=10}
     },
+    allow_productivity = false,
   },
 
   {
@@ -162,6 +173,7 @@ data:extend({
       {type="item", name="stone", amount=4}
     },
     results = {{type="item", name="mug-of-coffee", amount=4}},
+    allow_productivity = false,
   },
 
   {
@@ -174,6 +186,7 @@ data:extend({
     results = {
       {type="fluid", name="fluid-compressed-air", amount=10},
     },
+    allow_productivity = true,
   },
 
   {
@@ -190,6 +203,7 @@ data:extend({
       {type="fluid", name="fluid-compressed-air", amount=300},
     },
     main_product = "fluid-liquid-co2",
+    allow_productivity = true,
   },
 
   {
@@ -206,6 +220,7 @@ data:extend({
       {type="fluid", name="fluid-liquid-co2", amount=2},
     },
     main_product = "fluid-liquid-co2",
+    allow_productivity = true,
   },
 
   {
@@ -224,6 +239,7 @@ data:extend({
       {type="item", name="bio-mass", amount=3},
     },
     main_product = "caffeine",
+    allow_productivity = false,
   },
 
   {
@@ -237,6 +253,7 @@ data:extend({
       {type="item", name="wood", amount=6}
     },
     results = {{type="item", name="coffee-crate", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -254,6 +271,7 @@ data:extend({
       {type="item", name="copper-cable", amount=1000}
     },
     results = {{type="item", name="cryo-shipment", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -267,6 +285,7 @@ data:extend({
       {type="item", name="steel-plate", amount=1}
     },
     results = {{type="item", name="auto-injector-item", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -281,6 +300,7 @@ data:extend({
       {type="item", name="iron-plate", amount=2}
     },
     results = {{type="item", name="3a-tank-shell", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -295,6 +315,7 @@ data:extend({
       {type="item", name="iron-plate", amount=2}
     },
     results = {{type="item", name="3a-rocket", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -308,6 +329,7 @@ data:extend({
       {type="item", name="steel-plate", amount=1}
     },
     results = {{type="item", name="caffeine-rounds-magazine", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -321,6 +343,7 @@ data:extend({
       {type="item", name="iron-plate", amount=2}
     },
     results = {{type="item", name="caffeine-shotgun-shell", amount=1}},
+    allow_productivity = false,
   },
 
   {
@@ -332,5 +355,6 @@ data:extend({
       {type="item", name="star-buck", amount=25000}
     },
     results = {{type="item", name="golden-bean", amount=1}},
+    allow_productivity = false,
   },
 })
