@@ -49,7 +49,7 @@ end
 -------------------------------------------------------------------------------
 -- Removes the speed buff from the given player
 function removeBuff(player)
-    if game.active_mods['death_curses'] then
+    if script.active_mods['death_curses'] then
         -- the Death Curses mod sets the reduced and restored modifiers to fixed
         -- values, thus we can max it with -1 here without having an accumu-
         -- lating effect due to the difference in adding and subtracting
