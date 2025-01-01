@@ -221,8 +221,8 @@ data:extend({
     icon_mipmaps = 1,
     flags = {},
     subgroup = "equipment",
-    stack_size= 1,
-    placed_as_equipment_result = "auto-injector-equipment"
+    place_as_equipment_result = "auto-injector-equipment",
+    stack_size = 20,
   },
 
   {
