@@ -148,10 +148,9 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     flags = {},
-    ammo_category = "bullet",
+    ammo_category = "cannon-shell",
     ammo_type =
     {
-      category = "cannon-shell",
       target_type = "direction",
       action =
       {
@@ -184,10 +183,9 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     flags = {},
-    ammo_category = "bullet",
+    ammo_category = "rocket",
     ammo_type =
     {
-      category = "rocket",
       target_type = "direction",
       action =
       {
@@ -260,7 +258,6 @@ data:extend({
     ammo_category = "bullet",
     ammo_type =
     {
-      category = "bullet",
       action =
       {
         type = "direct",
@@ -304,10 +301,9 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_caffeine_shotgun_shell.png",
     icon_size = 64,
     icon_mipmaps = 4,
-    ammo_category = "bullet",
+    ammo_category = "shotgun-shell",
     ammo_type =
     {
-      category = "shotgun-shell",
       target_type = "direction",
       clamp_position = true,
       action =
