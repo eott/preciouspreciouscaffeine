@@ -124,10 +124,9 @@ data:extend({
     flags = {},
     subgroup = "coffee-intermediates",
     stack_size= 1,
-    rocket_launch_product = {
-      name = "star-buck",
-      amount = 1000,
-    }
+    weight = 1 * tons,
+    rocket_launch_products = {{type = "item", name = "star-buck", amount = 1000}},
+    send_to_orbit_mode = "automated"
   },
 
   {
