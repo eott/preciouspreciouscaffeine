@@ -124,10 +124,9 @@ data:extend({
     flags = {},
     subgroup = "coffee-intermediates",
     stack_size= 1,
-    rocket_launch_product = {
-      name = "star-buck",
-      amount = 1000,
-    }
+    weight = 1 * tons,
+    rocket_launch_products = {{type = "item", name = "star-buck", amount = 1000}},
+    send_to_orbit_mode = "automated"
   },
 
   {
@@ -148,9 +147,9 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     flags = {},
+    ammo_category = "cannon-shell",
     ammo_type =
     {
-      category = "cannon-shell",
       target_type = "direction",
       action =
       {
@@ -183,9 +182,9 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     flags = {},
+    ammo_category = "rocket",
     ammo_type =
     {
-      category = "rocket",
       target_type = "direction",
       action =
       {
@@ -219,8 +218,8 @@ data:extend({
     icon_mipmaps = 1,
     flags = {},
     subgroup = "equipment",
-    stack_size= 1,
-    placed_as_equipment_result = "auto-injector-equipment"
+    place_as_equipment_result = "auto-injector-equipment",
+    stack_size = 20,
   },
 
   {
@@ -255,9 +254,9 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_caffeine_magazine.png",
     icon_size = 64,
     icon_mipmaps = 4,
+    ammo_category = "bullet",
     ammo_type =
     {
-      category = "bullet",
       action =
       {
         type = "direct",
@@ -301,9 +300,9 @@ data:extend({
     icon = "__PreciousPreciousCaffeine__/graphics/icon_caffeine_shotgun_shell.png",
     icon_size = 64,
     icon_mipmaps = 4,
+    ammo_category = "shotgun-shell",
     ammo_type =
     {
-      category = "shotgun-shell",
       target_type = "direction",
       clamp_position = true,
       action =

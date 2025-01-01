@@ -1,11 +1,15 @@
 {
   "name": "PreciousPreciousCaffeine",
-  "version": "2.0.1",
-  "factorio_version": "1.1",
-  "dependencies": ["base >= 1.1"],
+  "version": "2.1.0",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "! space-age",
+    "! quality"
+  ],
   "title": "Precious, precious caffeine",
   "author": "raudorn",
   "contact": "https://github.com/eott/preciouspreciouscaffeine",
   "homepage": "https://github.com/eott/preciouspreciouscaffeine",
-  "description": "Adds product and research chains to produce coffee, which boosts manual crafting and running speed.\n\nYou start with the basic production of coffee berries and work through the technologies up to enjoy a nice mug of coffee. There are also more products to be derived from the humble coffee plant, that might aid you in your goals."
+  "description": "Adds products and a research chain to produce coffee, which boosts manual crafting and running speed.\n\nYou start with the basic production of coffee berries and work through the technologies up to enjoying a nice mug of coffee. There are also more uses to be discovered for the humble coffee plant."
 }

@@ -25,18 +25,20 @@ data:extend({
     module_specification = {
       module_slots = 0
     },
-    animation = {
-      layers = {
-        {
-          filename = "__PreciousPreciousCaffeine__/graphics/entity_coffee_plantation.png",
-          priority = "high",
-          width = 463,
-          height = 256,
-          scale = 0.44921875,
-          frame_count = 1,
-          line_length = 1,
-          shift = {1.35, 0.0},
-          animation_speed = 0.1,
+    graphics_set = {
+      animation = {
+        layers = {
+          {
+            filename = "__PreciousPreciousCaffeine__/graphics/entity_coffee_plantation.png",
+            priority = "high",
+            width = 463,
+            height = 256,
+            scale = 0.44921875,
+            frame_count = 1,
+            line_length = 1,
+            shift = {1.35, 0.0},
+            animation_speed = 0.1,
+          },
         },
       },
     },
