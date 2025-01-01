@@ -57,20 +57,18 @@ data:extend({
     collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
     selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
     render_layer = "object",
-    graphics_set = {
-      animations = {
-        layers = {
-          {
-            filename = "__PreciousPreciousCaffeine__/graphics/entity_golden_bean.png",
-            priority = "high",
-            width = 64,
-            height = 115,
-            scale = 1.0,
-            frame_count = 1,
-            line_length = 1,
-            shift = {0.0, -0.5},
-            animation_speed = 0.1,
-          },
+    animations = {
+      layers = {
+        {
+          filename = "__PreciousPreciousCaffeine__/graphics/entity_golden_bean.png",
+          priority = "high",
+          width = 64,
+          height = 115,
+          scale = 1.0,
+          frame_count = 1,
+          line_length = 1,
+          shift = {0.0, -0.5},
+          animation_speed = 0.1,
         },
       },
     },
