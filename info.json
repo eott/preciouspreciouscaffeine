@@ -1,8 +1,12 @@
 {
   "name": "PreciousPreciousCaffeine",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "factorio_version": "2.0",
-  "dependencies": ["base >= 2.0"],
+  "dependencies": [
+    "base >= 2.0",
+    "! space-age",
+    "! quality"
+  ],
   "title": "Precious, precious caffeine",
   "author": "raudorn",
   "contact": "https://github.com/eott/preciouspreciouscaffeine",
